@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.Shape;
 
 public final class Helper
 {
-	public static final float PX_TO_M = 20.0f; // 40 pixels for every meter
+	public static final float PX_TO_M = 32.0f; // 32 pixels for every meter
 	
 	/**
 	 * Moves a shape based on the amount of change (it just adds its position to the change amount)
@@ -125,5 +125,15 @@ public final class Helper
 	public static float mToPx(float m)
 	{
 		return m * PX_TO_M;
+	}
+	
+	public static int toInt(boolean b)
+	{
+		return b ? 1 : 0;
+	}
+	
+	public static Vector2 clone(Vector2 c)
+	{
+		return new Vector2(c.x, c.y);
 	}
 }

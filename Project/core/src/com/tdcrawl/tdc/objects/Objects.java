@@ -1,5 +1,6 @@
 package com.tdcrawl.tdc.objects;
 
+import com.tdcrawl.tdc.objects.entities.living.Player;
 import com.tdcrawl.tdc.registries.ObjectRegistry;
 
 /**
@@ -14,5 +15,6 @@ public class Objects
 	{
 		ObjectRegistry.registerObject("rectangle", new Rectangle.CubeTemplate());
 		ObjectRegistry.registerObject("platform", new Platform.PlatformTemplate());
+		ObjectRegistry.registerObject("player", new Player.PlayerTemplate());
 	}
 }

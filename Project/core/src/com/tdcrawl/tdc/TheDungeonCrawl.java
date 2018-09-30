@@ -2,6 +2,7 @@ package com.tdcrawl.tdc;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.utils.GdxNativesLoader;
+import com.tdcrawl.tdc.events.Events;
 import com.tdcrawl.tdc.objects.Objects;
 import com.tdcrawl.tdc.screens.GameScreen;
 
@@ -15,6 +16,7 @@ public class TheDungeonCrawl extends Game
 	@Override
 	public void create()
 	{
+		Events.registerAll();
 		Objects.registerAll();
 		
 		try

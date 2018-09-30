@@ -50,6 +50,7 @@ public class GameScreen implements Screen
 	{
 		// width and height are in px, so convert them to meters then adjust camera
 		cam = new OrthographicCamera(Helper.pxToM(width), Helper.pxToM(height));
+		cam.update();
 	}
 
 	@Override

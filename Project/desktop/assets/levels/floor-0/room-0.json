@@ -16,19 +16,6 @@
 			"misc": "0.9f"
 		},
 		{
-			"name": "rectangle",
-			"position":
-			{
-				"x": 0,
-				"y": 20.0
-			},
-			"dimensions":
-			{
-				"x": 3.0,
-				"y": 3.0
-			}
-		},
-		{
 			"name": "platform",
 			"position":
 			{
@@ -39,6 +26,14 @@
 			{
 				"x": 40.0,
 				"y": 1.0
+			}
+		},
+		{
+			"name": "player",
+			"position":
+			{
+				"x": 0,
+				"y": 10
 			}
 		}
 	]

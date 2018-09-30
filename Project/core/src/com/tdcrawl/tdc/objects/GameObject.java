@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
 
-public class GameObject
+public abstract class GameObject
 {
 	private Body body;
 	private World world;
@@ -177,7 +177,7 @@ public class GameObject
 	public void setPosition(Vector2 position)
 	{
 		if(initialized())
-			body.setTransform(getPosition(), getAngle());
+			body.setTransform(position, getAngle());
 		else
 			this.position = position;
 	}
@@ -257,5 +257,17 @@ public class GameObject
 	public float getDensity()
 	{
 		return density;
+	}
+	
+	/**
+	 * Tells if you are on the ground based off your Y velocity
+	 * Since y velocity is almost never 0 if it's not on the ground, this works pretty much every time and is more efficient than checking for collision
+	 * @return True if y velocity is 0, false if not
+	 */
+	public boolean isOnGround()
+	{
+		if(!initialized())
+			return false;
+		return this.getBody().getLinearVelocity().y == 0;
 	}
 }
