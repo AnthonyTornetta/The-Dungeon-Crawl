@@ -1,0 +1,13 @@
+{
+	"cube": {
+		"position": {
+			"x": 0,
+			"y": 3
+		},
+		"dimensions": {
+			"x": 3,
+			"y": 3
+		}
+		"misc": ""
+	}
+}

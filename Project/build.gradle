@@ -51,7 +51,6 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
-        
     }
 }
 
@@ -68,6 +67,7 @@ project(":core") {
         compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.4"
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
         
+        implementation "com.google.code.gson:gson:2.8.2"
     }
 }
 

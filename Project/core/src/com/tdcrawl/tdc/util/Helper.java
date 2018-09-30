@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.Shape;
 
 public final class Helper
 {
-	public static final float PX_TO_M = 40.0f; // 40 px per meter
+	public static final float PX_TO_M = 20.0f; // 40 pixels for every meter
 	
 	/**
 	 * Moves a shape based on the amount of change (it just adds its position to the change amount)
@@ -64,8 +64,6 @@ public final class Helper
 		}
 		else if(s instanceof EdgeShape)
 		{
-			// Not tested yet
-			
 			EdgeShape shape = (EdgeShape)s;
 			
 			Vector2 temp = new Vector2();

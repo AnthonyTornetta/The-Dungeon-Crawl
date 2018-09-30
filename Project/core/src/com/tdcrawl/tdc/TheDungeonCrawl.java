@@ -2,6 +2,7 @@ package com.tdcrawl.tdc;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.utils.GdxNativesLoader;
+import com.tdcrawl.tdc.objects.Objects;
 import com.tdcrawl.tdc.screens.GameScreen;
 
 public class TheDungeonCrawl extends Game
@@ -14,6 +15,17 @@ public class TheDungeonCrawl extends Game
 	@Override
 	public void create()
 	{
-		setScreen(new GameScreen());
+		Objects.registerAll();
+		
+		try
+		{
+			setScreen(new GameScreen());
+		}
+		catch (Exception e)
+		{
+			// TODO: Handle error by saving it to log or something
+			e.printStackTrace();
+			System.exit(1);
+		}
 	}
 }

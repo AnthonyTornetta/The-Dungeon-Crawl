@@ -7,6 +7,9 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.tdcrawl.tdc.util.Helper;
 
+/**
+ * A nicer way of creating a fixture and adding it to a body
+ */
 public class ObjectFixture
 {	
 	private Fixture fixture;
