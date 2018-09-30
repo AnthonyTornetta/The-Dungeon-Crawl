@@ -14,25 +14,31 @@ import com.tdcrawl.tdc.util.Helper;
 
 public class Player extends LivingEntity
 {
-	private final float ACCELERATION = 20.0f; // x m/s^2
-	private final float JUMP_STRENGTH = 10.0f; // acceleration applied when jump occurs
-	private final int JUMPS_ALLOWED = 2;
-	private final float TIME_BETWEEN_JUMPS = 0.4f;
+	private final float ACCELERATION = 10.0f; // x m/s^2
+	private final float JUMP_STRENGTH = 5.0f; // acceleration applied when jump occurs
+	private final int JUMPS_ALLOWED_IN_AIR = 1;
+	private final float TIME_BETWEEN_JUMPS = 0.25f;
 	
 	private Vector2 startPos;
 	
-	private int jumps = 0;
+	private int inAirJumps = 0;
 	private float timeSinceLastJump = 0;
+	
+	private static final float height = 0.45f;
+	private static final float headRadius = 0.2f;
+	private static final float width = 0.2f;
 	
 	public Player(Vector2 position, int maxHealth)
 	{
 		super(position, BodyType.DynamicBody, 0, true, true, true, createCenterFixture(), maxHealth);
 		
+		
+		
 		startPos = Helper.clone(position);
 		
 		CircleShape headShape = new CircleShape();
-		headShape.setRadius(0.4f);
-		ObjectFixture head = new ObjectFixture(true, 1.5f, 0.1f, 0.05f, headShape, new Vector2(0, 0.9f + 0.4f));
+		headShape.setRadius(headRadius);
+		ObjectFixture head = new ObjectFixture(true, 1.5f, 0.1f, 0.05f, headShape, new Vector2(0, height + headRadius));
 		
 		this.addFixture(head);
 	}
@@ -40,7 +46,7 @@ public class Player extends LivingEntity
 	private static ObjectFixture createCenterFixture()
 	{
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(0.2f, 0.9f);
+		shape.setAsBox(width, height);
 		
 		ObjectFixture centerFixture = new ObjectFixture(true, 6.0f, 0.0f, 0.05f, shape, new Vector2(0, 0));
 		return centerFixture;
@@ -48,7 +54,7 @@ public class Player extends LivingEntity
 	
 	@Override
 	public void tick(float delta)
-	{
+	{		
 		timeSinceLastJump += delta;
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.R))
@@ -56,7 +62,7 @@ public class Player extends LivingEntity
 			setPosition(Helper.clone(startPos));
 			getBody().setLinearVelocity(0, 0);
 		}
-			
+		
 		Vector2 acceleration = new Vector2();
 		
 		acceleration.x = Helper.toInt(Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT));
@@ -64,16 +70,20 @@ public class Player extends LivingEntity
 		
 		acceleration.x *= ACCELERATION * delta;
 		
+		if(this.isOnGround())
+			inAirJumps = 0;
+		
 		if(Gdx.input.isKeyPressed(Input.Keys.SPACE) || Gdx.input.isKeyPressed(Input.Keys.W))
-		{
-			if(this.isOnGround())
-				jumps = 0;
-			
-			if(timeSinceLastJump >= TIME_BETWEEN_JUMPS && jumps < JUMPS_ALLOWED)
+		{			
+			if(timeSinceLastJump >= TIME_BETWEEN_JUMPS)
 			{
-				timeSinceLastJump = 0;
-				jumps++;
-				acceleration.y += JUMP_STRENGTH;
+				if(inAirJumps < JUMPS_ALLOWED_IN_AIR || this.isOnGround())
+				{
+					if(!this.isOnGround())
+						inAirJumps++;
+					timeSinceLastJump = 0;
+					acceleration.y += JUMP_STRENGTH;
+				}
 			}
 		}
 		
