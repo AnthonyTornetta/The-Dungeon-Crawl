@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.tdcrawl.tdc.events.CollisionEvent;
 import com.tdcrawl.tdc.events.EventHandler;
 import com.tdcrawl.tdc.objects.GameObject;
+import com.tdcrawl.tdc.objects.entities.living.Player;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
 import com.tdcrawl.tdc.room.Room;
 import com.tdcrawl.tdc.room.RoomBuilder;
@@ -36,6 +38,11 @@ public class Level
 	 * Where every object will be
 	 */
 	private World world;
+	
+	/**
+	 * This is the player
+	 */
+	private Player player;
 	
 	/**
 	 * Creates the world and loads the room variations
@@ -99,6 +106,9 @@ public class Level
 		for(GameObject o : rooms.get(0).getObjectsInRoom())
 		{
 			o.init(world);
+			
+			if(o instanceof Player)
+				player = (Player)o;
 		}
 	}
 	
@@ -155,6 +165,8 @@ public class Level
 	
 	public void render(float delta, Camera cam, Box2DDebugRenderer debugRenderer)
 	{
+		if(player != null)
+			cam.position.lerp(new Vector3(player.getPosition(), 0), 0.1f);
 		cam.update();
 		
 		if(debugRenderer != null)
