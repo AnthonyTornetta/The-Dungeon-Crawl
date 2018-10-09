@@ -10,6 +10,9 @@ public abstract class LivingEntity extends Entity
 {
 	private int health, maxHealth;
 	
+	/**
+	 * @see Entity
+	 */
 	public LivingEntity(Shape shape, Vector2 position, BodyType type, float density, float restitution, float friction,
 			float angle, boolean bullet, boolean fixedRotation, boolean collidable, Vector2 centerPoint, int maxHealth)
 	{

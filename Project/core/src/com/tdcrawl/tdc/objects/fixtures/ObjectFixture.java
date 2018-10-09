@@ -13,6 +13,7 @@ import com.tdcrawl.tdc.util.Helper;
 public class ObjectFixture
 {	
 	private Fixture fixture;
+	private Body body;
 	
 	// Once the object is initialized, this values are not updated. Use the getters and setters instead
 	private boolean collidable;
@@ -48,6 +49,8 @@ public class ObjectFixture
 		if(initialized())
 			throw new IllegalStateException("This ObjectFixture has already been initialized!");
 		
+		this.body = b;
+		
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.density = getDensity();
 		fixtureDef.friction = getFriction();
@@ -64,6 +67,21 @@ public class ObjectFixture
 		fixture.setUserData(this);
 		
 		shape.dispose(); // We no longer need this
+	}
+	
+	public void remove()
+	{
+		if(initialized())
+		{
+			if(getBody() != null)
+			{
+				int i = body.getFixtureList().indexOf(getFixture(), false);
+				if(i != -1)
+					body.getFixtureList().removeIndex(i);
+			}
+		}
+		else
+			throw new IllegalStateException("Cannot remove an uninitialized fixture!");
 	}
 	
 	/**
@@ -153,4 +171,8 @@ public class ObjectFixture
 		else
 			this.collidable = collidable;
 	}
+
+	public Fixture getFixture() { return fixture; }
+	
+	public Body getBody() { return body; }
 }

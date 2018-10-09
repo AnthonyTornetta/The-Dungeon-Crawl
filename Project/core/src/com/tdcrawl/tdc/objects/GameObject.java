@@ -11,7 +11,11 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
+import com.tdcrawl.tdc.util.Helper;
 
+/**
+ * Stores fixtures to be added to the body (other than the center one) once it is initialized.
+ */
 public abstract class GameObject
 {
 	private Body body;
@@ -31,7 +35,7 @@ public abstract class GameObject
 	private boolean collidable;
 	
 	/**
-	 * Stores fixtures to be added to be added to the body (other than the center one) once it is initialized. Then it is not used again
+	 * Stores fixtures to be added to the body (other than the center one) once it is initialized.
 	 */
 	private List<ObjectFixture> fixturesToAdd = new ArrayList<>();
 	
@@ -44,7 +48,7 @@ public abstract class GameObject
 	 * @param density How dense the object is
 	 * @param restitution How bouncy the object is between 0 to 1.0f inclusive
 	 * @param friction How much friction it has between 0 to 1.0f inclusive
-	 * @param angle The angle of the body (in degrees I think)
+	 * @param angle The angle of the body in radians
 	 * @param bullet If the collision should be extra precise on this objects (used for really quick things)
 	 * @param fixedRotation If rotation should be handled through physical interactions or just via programmatically setting it
 	 * @param collidable If this has a solid collision box (true), or things will pass through it (false)
@@ -64,7 +68,7 @@ public abstract class GameObject
 	 * @param density How dense the object is
 	 * @param restitution How bouncy the object is between 0 to 1.0f inclusive
 	 * @param friction How much friction it has between 0 to 1.0f inclusive
-	 * @param angle The angle of the body (in degrees I think)
+	 * @param angle The angle of the body in radians
 	 * @param bullet If the collision should be extra precise on this objects (used for really quick things)
 	 * @param fixedRotation If rotation should be handled through physical interactions or just via programmatically setting it
 	 * @param collidable If this has a solid collision box (true), or things will pass through it (false)
@@ -143,7 +147,7 @@ public abstract class GameObject
 		{
 			if(centerFixture == null)
 				centerFixture = f;
-			f.init(getBody());	
+			Helper.addFixture(f, this);
 		}
 		else
 		{
@@ -152,8 +156,24 @@ public abstract class GameObject
 			else
 				fixturesToAdd.add(f);
 		}
-		
-		density += f.getDensity();
+	}
+	
+	public void removeFixture(ObjectFixture f)
+	{
+		if(initialized())
+		{
+			if(f.equals(centerFixture))
+				centerFixture = null;
+			
+			Helper.removeFixture(f);
+		}
+		else
+		{
+			if(centerFixture.equals(f))
+				centerFixture = null;
+			else
+				fixturesToAdd.remove(f);
+		}
 	}
 	
 	// Getters & Setters //

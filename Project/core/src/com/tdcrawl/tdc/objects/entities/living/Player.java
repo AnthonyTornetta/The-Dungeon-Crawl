@@ -2,15 +2,22 @@ package com.tdcrawl.tdc.objects.entities.living;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.tdcrawl.tdc.objects.GameObject;
+import com.tdcrawl.tdc.objects.bodyparts.Arm;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
 import com.tdcrawl.tdc.registries.templates.ObjectData;
 import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
 import com.tdcrawl.tdc.util.Helper;
+import com.tdcrawl.tdc.util.Reference;
 
 public class Player extends LivingEntity
 {
@@ -28,11 +35,18 @@ public class Player extends LivingEntity
 	private static final float headRadius = 0.2f;
 	private static final float width = 0.2f;
 	
+	private Arm arm;
+	
+	private static final Vector2 ARM_OFFSET = new Vector2(0f, height - 0.2f);
+	
+	/**
+	 * For debug usage
+	 */
+	private ShapeRenderer sr = new ShapeRenderer();
+	
 	public Player(Vector2 position, int maxHealth)
 	{
 		super(position, BodyType.DynamicBody, 0, true, true, true, createCenterFixture(), maxHealth);
-		
-		
 		
 		startPos = Helper.clone(position);
 		
@@ -43,6 +57,24 @@ public class Player extends LivingEntity
 		this.addFixture(head);
 	}
 	
+	@Override
+	public void init(World world)
+	{
+		super.init(world);
+		
+		PolygonShape armShape = new PolygonShape();
+		armShape.setAsBox(0.3f, 0.08f, new Vector2(0.25f, 0), 0.0f);
+		
+		arm = new Arm(armShape, getPosition(), BodyType.DynamicBody, getDensity(), 0, 0, 0, false, true, false);
+		
+		arm.init(world);
+		arm.attatch(this, ARM_OFFSET);
+	}
+	
+	/**
+	 * Just for use in the constructor to make the center fixture
+	 * @return The center fixture
+	 */
 	private static ObjectFixture createCenterFixture()
 	{
 		PolygonShape shape = new PolygonShape();
@@ -53,9 +85,35 @@ public class Player extends LivingEntity
 	}
 	
 	@Override
-	public void tick(float delta)
-	{		
+	public void tick(float delta, Camera cam)
+	{
 		timeSinceLastJump += delta;
+		
+		int mX = Gdx.input.getX();
+		int mY = Gdx.input.getY();
+		
+		Vector2 mouseCoordsInMeters = new Vector2(mX, mY);
+		mouseCoordsInMeters = Helper.screenCoordinatesToMeters(mouseCoordsInMeters, cam);
+		
+		if(mX >= 0 && mX < Gdx.graphics.getWidth() && mY >= 0 && mY < Gdx.graphics.getHeight())
+		{
+			if(Gdx.input.getDeltaX() != 0 || Gdx.input.getDeltaY() != 0)
+			{
+				arm.setAngle(Helper.angleTo(getPosition().cpy().add(ARM_OFFSET).add(ARM_OFFSET), mouseCoordsInMeters, ARM_OFFSET));
+			}
+		}
+		
+		if(Reference.isDebug() && cam != null)
+		{
+	        sr.setColor(Color.RED);
+	        sr.setProjectionMatrix(cam.combined);
+	
+	        sr.begin(ShapeType.Line);
+	        sr.line(getPosition().x + ARM_OFFSET.x, getPosition().y + ARM_OFFSET.y,
+	        		mouseCoordsInMeters.x, mouseCoordsInMeters.y);
+	        
+	        sr.end();
+		}
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.R))
 		{
@@ -89,7 +147,7 @@ public class Player extends LivingEntity
 		
 		getBody().setLinearVelocity(getBody().getLinearVelocity().add(acceleration));
 	}
-	
+
 	@Override
 	public boolean die()
 	{

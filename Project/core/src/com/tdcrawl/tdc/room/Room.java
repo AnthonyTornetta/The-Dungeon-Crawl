@@ -3,6 +3,7 @@ package com.tdcrawl.tdc.room;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.entities.Entity;
 
@@ -14,10 +15,10 @@ public class Room
 	private List<GameObject> objectsInRoom = new ArrayList<>();
 	private List<Entity> entitiesInRoom = new ArrayList<>();
 	
-	public void tick(float delta)
+	public void tick(float delta, Camera cam)
 	{
 		for(Entity e : entitiesInRoom)
-			e.tick(delta);
+			e.tick(delta, cam);
 	}
 	
 	// Getters & Setters //

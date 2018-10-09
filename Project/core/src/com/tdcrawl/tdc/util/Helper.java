@@ -1,15 +1,39 @@
 package com.tdcrawl.tdc.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.World;
+import com.tdcrawl.tdc.events.EventsHandler;
+import com.tdcrawl.tdc.events.types.WorldLockChangeEvent;
+import com.tdcrawl.tdc.joints.ObjectJoint;
+import com.tdcrawl.tdc.objects.GameObject;
+import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
 
 public final class Helper
 {
 	public static final float PX_TO_M = 32.0f; // 32 pixels for every meter
+	
+	private static boolean worldLocked = false;
+	
+	private static List<ObjectFixture> fixturesToRemove = new ArrayList<>();
+	private static Map<ObjectFixture, GameObject> fixturesToAdd = new HashMap<>();
+	
+	private static List<ObjectJoint> jointsToRemove = new ArrayList<>();
+	private static List<ObjectJoint> jointsToAdd = new ArrayList<>();
+	
+	private static List<GameObject> objectsToRemove = new ArrayList<>();
+	private static Map<GameObject, World> objectsToAdd = new HashMap<>();
 	
 	/**
 	 * Moves a shape based on the amount of change (it just adds its position to the change amount)
@@ -136,4 +160,113 @@ public final class Helper
 	{
 		return new Vector2(c.x, c.y);
 	}
+	
+	public static float angleTo(float x1, float y1, float x2, float y2)
+	{
+		return angleTo(new Vector2(x1, y1), new Vector2(x2, y2));
+	}
+	
+	public static float angleTo(Vector2 x, Vector2 y)
+	{
+		return angleTo(x, y, Vector2.Zero);
+	}
+	
+	public static float angleTo(Vector2 x, Vector2 y, Vector2 offset)
+	{
+		return new Vector2(y).sub(new Vector2(x)).add(offset).angleRad();
+	}
+
+	public static void removeFixture(ObjectFixture f)
+	{
+		if(isWorldLocked())
+			fixturesToRemove.add(f);
+		else
+			f.remove();
+	}
+	
+	public static void addFixture(ObjectFixture f, GameObject gameObject)
+	{
+		if(isWorldLocked())
+			fixturesToAdd.put(f, gameObject);
+		else
+			f.init(gameObject.getBody());
+	}
+	
+	public static void removeJoint(ObjectJoint joint)
+	{
+		if(isWorldLocked())
+			jointsToRemove.add(joint);
+		else
+			joint.detatch();
+	}
+
+	public static void addJoint(ObjectJoint joint) 
+	{
+		if(isWorldLocked())
+			jointsToAdd.add(joint);
+		else
+			joint.attach();
+	}
+	
+	public static void addObject(GameObject obj, World world)
+	{
+		if(isWorldLocked())
+			objectsToAdd.put(obj, world);
+		else
+			obj.init(world);
+	}
+	
+	public static void removeObject(GameObject obj)
+	{
+		if(isWorldLocked())
+			objectsToRemove.add(obj);
+		else
+			obj.getWorld().destroyBody(obj.getBody());
+	}
+	
+	public static void cleanup()
+	{
+		if(!isWorldLocked())
+		{
+			for(ObjectFixture f : fixturesToAdd.keySet())
+			{
+				addFixture(f, fixturesToAdd.get(f));
+			}
+			
+			fixturesToAdd.clear();
+			
+			while(fixturesToRemove.size() != 0)
+				removeFixture(fixturesToRemove.remove(fixturesToRemove.size() - 1));
+			
+			while(jointsToAdd.size() != 0)
+				addJoint(jointsToAdd.remove(jointsToAdd.size() - 1));
+			while(jointsToRemove.size() != 0)
+				removeJoint(jointsToRemove.remove(jointsToRemove.size() - 1));
+			
+			for(GameObject obj : objectsToAdd.keySet())
+				addObject(obj, objectsToAdd.get(obj));
+			
+			objectsToAdd.clear();
+			
+			while(objectsToRemove.size() != 0)
+				removeObject(objectsToRemove.get(objectsToRemove.size() - 1));
+		}
+		else
+			throw new IllegalStateException("cleanup cannot be called when world is locked!");
+	}
+	
+	public static Vector2 screenCoordinatesToMeters(Vector2 coords, Camera cam)
+	{
+		Vector3 v3 = new Vector3(coords, 0);
+		cam.unproject(v3);
+		return new Vector2(v3.x, v3.y);
+	}
+	
+	public static void setWorldLocked(boolean b)
+	{
+		worldLocked = b;
+		EventsHandler.call(new WorldLockChangeEvent(isWorldLocked()));
+	}
+	
+	public static boolean isWorldLocked() { return worldLocked; }
 }

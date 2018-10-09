@@ -1,4 +1,4 @@
-package com.tdcrawl.tdc.events;
+package com.tdcrawl.tdc.events.exceptions;
 
 public class UnregisteredEventException extends RuntimeException
 {
@@ -9,11 +9,18 @@ public class UnregisteredEventException extends RuntimeException
 	
 	private String message;
 	
+	/**
+	 * Thrown whenever an unregistered event is referenced
+	 */
 	public UnregisteredEventException()
 	{
 		this("Event unregistered!");
 	}
 	
+	/**
+	 * Thrown whenever an unregistered event is referenced
+	 * @param message What to say
+	 */
 	public UnregisteredEventException(String message)
 	{
 		this.message = message;

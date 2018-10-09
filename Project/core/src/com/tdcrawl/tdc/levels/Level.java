@@ -16,13 +16,18 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
-import com.tdcrawl.tdc.events.CollisionEvent;
-import com.tdcrawl.tdc.events.EventHandler;
+import com.tdcrawl.tdc.events.CustomEvents;
+import com.tdcrawl.tdc.events.Event;
+import com.tdcrawl.tdc.events.EventCallback;
+import com.tdcrawl.tdc.events.EventsHandler;
+import com.tdcrawl.tdc.events.types.CollisionEvent;
+import com.tdcrawl.tdc.events.types.WorldLockChangeEvent;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.entities.living.Player;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
 import com.tdcrawl.tdc.room.Room;
 import com.tdcrawl.tdc.room.RoomBuilder;
+import com.tdcrawl.tdc.util.Helper;
 
 /**
  * Stores all the rooms of a given level and handles their generation
@@ -31,6 +36,8 @@ public class Level
 {
 	private List<Room> rooms = new ArrayList<>();
 	private List<RoomBuilder> roomTypes = new ArrayList<>();
+	
+	private RoomBuilder spawnRoom;
 	
 	private final int FLOOR_NUMBER;
 	
@@ -68,7 +75,7 @@ public class Level
 						ObjectFixture fix1 = (ObjectFixture) contact.getFixtureA().getUserData();
 						ObjectFixture fix2 = (ObjectFixture) contact.getFixtureB().getUserData();
 						
-						EventHandler.call(new CollisionEvent(obj1, obj2, fix1, fix2));
+						EventsHandler.call(new CollisionEvent(obj1, obj2, fix1, fix2));
 					}
 				}
 				
@@ -100,8 +107,8 @@ public class Level
 	 */
 	public void create()
 	{
-		// For now this just loads everything in the first room it finds
-		rooms.add(roomTypes.get(0).createRoom());
+		// For now this just loads everything in the spawner room
+		rooms.add(spawnRoom.createRoom());
 		
 		for(GameObject o : rooms.get(0).getObjectsInRoom())
 		{
@@ -125,23 +132,56 @@ public class Level
 		// Keep going until we run out of rooms
 		while (f.exists())
 		{
-			StringBuilder lines = new StringBuilder();
-			BufferedReader br = new BufferedReader(new FileReader(f));
-			for(String line = br.readLine(); line != null; line = br.readLine())
-			{
-				lines.append(line);
-			}
-			br.close();
-			
-			// Creates the room builder to later build the room once create() is called
-			RoomBuilder builder = new RoomBuilder();
-			builder.createFromJSON(lines.toString());
-			roomTypes.add(builder);
+			roomTypes.add(getRoomBuilder(f));
 			
 			i++;
-			
 			f = new File(getFloorFolder() + roomName(i));
 		}
+		
+		f = new File(getFloorFolder() + "room-spawn.json");
+		System.out.println(f.getAbsolutePath());
+		
+		if(!f.exists())
+			throw new IllegalStateException("No spawn room for floor " + FLOOR_NUMBER + "!");
+		
+		spawnRoom = getRoomBuilder(f);
+		
+		EventsHandler.subscribe(CustomEvents.WORLD_LOCK_CHANGE_EVENT, new EventCallback()
+		{
+			@Override
+			public void callback(Event e)
+			{
+				WorldLockChangeEvent event = (WorldLockChangeEvent)e;
+				
+				if(!event.isCancelled() && !event.isLocked())
+				{
+					Helper.cleanup();
+				}
+			}
+		});
+	}
+	
+	/**
+	 * Loads and creates a RoomBuilder from a file with RoomBuilder json
+	 * @param f The file to load the json from
+	 * @return The RoomBuilder generated from the json in the file
+	 * @throws IOException If there is an error reading the room file
+	 */
+	private RoomBuilder getRoomBuilder(File f) throws IOException
+	{
+		StringBuilder lines = new StringBuilder();
+		BufferedReader br = new BufferedReader(new FileReader(f));
+		for(String line = br.readLine(); line != null; line = br.readLine())
+		{
+			lines.append(line);
+		}
+		br.close();
+		
+		// Creates the room builder to later build the room once create() is called
+		RoomBuilder builder = new RoomBuilder();
+		builder.createFromJSON(lines.toString());
+		
+		return builder;
 	}
 	
 	private String roomName(int i)
@@ -154,13 +194,18 @@ public class Level
 		return "assets/levels/floor-" + FLOOR_NUMBER + "/";
 	}
 	
-	public void tick(float delta)
+	public void tick(float delta, Camera camera)
 	{
+		Helper.setWorldLocked(true);
 		world.step(delta, 8, 3); // 8 and 3 are good* values I found online. *I assume they are good.
 		// URL: http://www.iforce2d.net/b2dtut/worlds
 		
 		for(Room room : rooms)
-			room.tick(delta);
+			room.tick(delta, camera);
+		
+		Helper.setWorldLocked(false);
+		
+		Helper.cleanup(); // Does anything that had to be done after ticking
 	}
 	
 	public void render(float delta, Camera cam, Box2DDebugRenderer debugRenderer)
