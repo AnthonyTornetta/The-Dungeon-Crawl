@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.tdcrawl.tdc.events.CustomEvents;
 import com.tdcrawl.tdc.objects.Objects;
 import com.tdcrawl.tdc.screens.GameScreen;
+import com.tdcrawl.tdc.util.Reference;
 
 public class TheDungeonCrawl extends Game
 {
@@ -23,11 +24,9 @@ public class TheDungeonCrawl extends Game
 		{
 			setScreen(new GameScreen());
 		}
-		catch (Exception e)
+		catch (Exception ex)
 		{
-			// TODO: Handle error by saving it to log or something
-			e.printStackTrace();
-			System.exit(1);
+			Reference.handleError(ex);
 		}
 	}
 }

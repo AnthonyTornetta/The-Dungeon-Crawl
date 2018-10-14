@@ -4,11 +4,13 @@ import java.io.IOException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.tdcrawl.tdc.levels.Level;
 import com.tdcrawl.tdc.util.Helper;
+import com.tdcrawl.tdc.util.Reference;
 
 public class GameScreen implements Screen
 {	
@@ -39,6 +41,9 @@ public class GameScreen implements Screen
 	public void render(float delta)
 	{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		if(Reference.isDebug() && Gdx.input.isKeyJustPressed(Keys.F1))
+			throw new RuntimeException("User-called crash.");
 		
 		level.tick(delta, cam);
 		
