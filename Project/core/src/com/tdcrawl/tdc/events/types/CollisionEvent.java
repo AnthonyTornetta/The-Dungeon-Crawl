@@ -7,6 +7,13 @@ import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
 
 public class CollisionEvent extends Event
 {
+	public static enum CollisionState
+	{
+		BEGIN_COLLISION,
+		END_COLLISION
+	}
+	
+	private CollisionState state;
 	private GameObject obj1, obj2;
 	private ObjectFixture fix1, fix2;
 	
@@ -18,7 +25,7 @@ public class CollisionEvent extends Event
 	 * @param fix1 The actual fixture that touched from obj1
 	 * @param fix2 The actual fixture that touched from obj2
 	 */
-	public CollisionEvent(GameObject obj1, GameObject obj2, ObjectFixture fix1, ObjectFixture fix2)
+	public CollisionEvent(GameObject obj1, GameObject obj2, ObjectFixture fix1, ObjectFixture fix2, CollisionState state)
 	{
 		this.obj1 = obj1;
 		this.obj2 = obj2;
@@ -34,6 +41,8 @@ public class CollisionEvent extends Event
 	
 	public ObjectFixture getFixture1() { return fix1; }
 	public ObjectFixture getFixture2() { return fix2; }
+	
+	public CollisionState getState() { return state; }
 	
 	@Override
 	public boolean isCancellable() { return false; }

@@ -290,4 +290,86 @@ public abstract class GameObject
 			return false;
 		return this.getBody().getLinearVelocity().y == 0;
 	}
+
+	@Override
+	/*
+	 * Eclipse Generated
+	 */
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Float.floatToIntBits(angle);
+		result = prime * result + ((body == null) ? 0 : body.hashCode());
+		result = prime * result + (bullet ? 1231 : 1237);
+		result = prime * result + ((centerFixture == null) ? 0 : centerFixture.hashCode());
+		result = prime * result + ((centralPoint == null) ? 0 : centralPoint.hashCode());
+		result = prime * result + (collidable ? 1231 : 1237);
+		result = prime * result + Float.floatToIntBits(density);
+		result = prime * result + (fixedRotation ? 1231 : 1237);
+		result = prime * result + ((fixturesToAdd == null) ? 0 : fixturesToAdd.hashCode());
+		result = prime * result + ((position == null) ? 0 : position.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+	@Override
+	/*
+	 * Eclipse Generated
+	 */
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if(!(obj instanceof GameObject))
+			return false;
+		GameObject other = (GameObject) obj;
+		if (Float.floatToIntBits(angle) != Float.floatToIntBits(other.angle))
+			return false;
+		if (body == null) 
+			if (other.body != null)
+				return false;
+		else if (!body.equals(other.body))
+			return false;
+		if (bullet != other.bullet)
+			return false;
+		if (centerFixture == null) 
+			if (other.centerFixture != null)
+				return false;
+		else if (!centerFixture.equals(other.centerFixture))
+			return false;
+		if (centralPoint == null) 
+			if (other.centralPoint != null)
+				return false;
+		else if (!centralPoint.equals(other.centralPoint))
+			return false;
+		if (collidable != other.collidable)
+			return false;
+		if (Float.floatToIntBits(density) != Float.floatToIntBits(other.density))
+			return false;
+		if (fixedRotation != other.fixedRotation)
+			return false;
+		if (fixturesToAdd == null) 
+			if (other.fixturesToAdd != null)
+				return false;
+		else if (!fixturesToAdd.equals(other.fixturesToAdd))
+			return false;
+		if (position == null) 
+			if (other.position != null)
+				return false;
+		else if (!position.equals(other.position))
+			return false;
+		if (type != other.type)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "GameObject [body=" + body + ", world=" + world + ", centralPoint=" + centralPoint + ", density="
+				+ density + ", centerFixture=" + centerFixture + ", type=" + type + ", position=" + position
+				+ ", angle=" + angle + ", bullet=" + bullet + ", fixedRotation=" + fixedRotation + ", collidable="
+				+ collidable + ", fixturesToAdd=" + fixturesToAdd + "]";
+	}
 }

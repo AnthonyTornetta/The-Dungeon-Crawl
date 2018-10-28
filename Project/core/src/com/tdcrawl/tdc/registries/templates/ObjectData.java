@@ -12,5 +12,6 @@ public class ObjectData
 	public String name;
 	public Vector2 position;
 	public Vector2 dimensions;
+	public float radius;
 	public String misc;
 }

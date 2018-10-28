@@ -2,10 +2,10 @@ package com.tdcrawl.tdc.objects;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.tdcrawl.tdc.registries.templates.ObjectData;
-import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
+import com.tdcrawl.tdc.registries.templates.ObjectData;
+import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
 
 /**
  * An example object that is basically just a box

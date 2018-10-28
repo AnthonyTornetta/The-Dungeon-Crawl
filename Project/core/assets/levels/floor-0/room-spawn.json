@@ -21,6 +21,19 @@
 				"x": 0,
 				"y": 10
 			}
+		},
+		{
+			"name": "rectangle",
+			"position":
+			{
+				"x": 0,
+				"y": 20
+			},
+			"dimensions":
+			{
+				"x": 5,
+				"y": 5
+			}
 		}
 	]
 }

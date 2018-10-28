@@ -21,6 +21,7 @@ import com.tdcrawl.tdc.events.Event;
 import com.tdcrawl.tdc.events.EventCallback;
 import com.tdcrawl.tdc.events.EventsHandler;
 import com.tdcrawl.tdc.events.types.CollisionEvent;
+import com.tdcrawl.tdc.events.types.CollisionEvent.CollisionState;
 import com.tdcrawl.tdc.events.types.WorldLockChangeEvent;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.entities.living.Player;
@@ -75,14 +76,24 @@ public class Level
 						ObjectFixture fix1 = (ObjectFixture) contact.getFixtureA().getUserData();
 						ObjectFixture fix2 = (ObjectFixture) contact.getFixtureB().getUserData();
 						
-						EventsHandler.call(new CollisionEvent(obj1, obj2, fix1, fix2));
+						EventsHandler.call(new CollisionEvent(obj1, obj2, fix1, fix2, CollisionState.BEGIN_COLLISION));
 					}
 				}
 				
 				@Override
 				public void endContact(Contact contact)
 				{
-					
+					if(contact.getFixtureA().getBody().getUserData() instanceof GameObject && 
+							contact.getFixtureB().getBody().getUserData() instanceof GameObject)
+					{
+						GameObject obj1 = (GameObject) contact.getFixtureA().getBody().getUserData();
+						GameObject obj2 = (GameObject) contact.getFixtureB().getBody().getUserData();
+						
+						ObjectFixture fix1 = (ObjectFixture) contact.getFixtureA().getUserData();
+						ObjectFixture fix2 = (ObjectFixture) contact.getFixtureB().getUserData();
+						
+						EventsHandler.call(new CollisionEvent(obj1, obj2, fix1, fix2, CollisionState.END_COLLISION));
+					}
 				}
 
 				@Override
@@ -130,6 +141,7 @@ public class Level
 		File f = new File(getFloorFolder() + roomName(i));
 		
 		// Keep going until we run out of rooms
+		
 		while (f.exists())
 		{
 			roomTypes.add(getRoomBuilder(f));
@@ -139,7 +151,6 @@ public class Level
 		}
 		
 		f = new File(getFloorFolder() + "room-spawn.json");
-		System.out.println(f.getAbsolutePath());
 		
 		if(!f.exists())
 			throw new IllegalStateException("No spawn room for floor " + FLOOR_NUMBER + "!");

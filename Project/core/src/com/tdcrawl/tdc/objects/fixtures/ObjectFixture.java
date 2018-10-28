@@ -175,4 +175,12 @@ public class ObjectFixture
 	public Fixture getFixture() { return fixture; }
 	
 	public Body getBody() { return body; }
+
+	@Override
+	public String toString()
+	{
+		return "ObjectFixture [fixture=" + Helper.toString(fixture) + ", body=" + Helper.toString(body) + ", collidable=" + collidable + ", density="
+				+ density + ", restitution=" + restitution + ", friction=" + friction + ", shape=" + Helper.toString(shape)
+				+ ", position=" + position + "]";
+	}
 }

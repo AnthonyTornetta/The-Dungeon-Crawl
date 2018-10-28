@@ -16,5 +16,6 @@ public class Objects
 		ObjectRegistry.registerObject("rectangle", new Rectangle.CubeTemplate());
 		ObjectRegistry.registerObject("platform", new Platform.PlatformTemplate());
 		ObjectRegistry.registerObject("player", new Player.PlayerTemplate());
+		ObjectRegistry.registerObject("ball", new Ball.BallTemplate());
 	}
 }

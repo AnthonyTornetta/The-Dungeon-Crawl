@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.bodyparts.Arm;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
+import com.tdcrawl.tdc.objects.fixtures.Sensor;
 import com.tdcrawl.tdc.registries.templates.ObjectData;
 import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
 import com.tdcrawl.tdc.util.Helper;
@@ -38,6 +39,8 @@ public class Player extends LivingEntity
 	private Arm arm;
 	
 	private static final Vector2 ARM_OFFSET = new Vector2(0f, height - 0.2f);
+	
+	private int numFootContacts = 0;
 	
 	/**
 	 * For debug usage
@@ -69,6 +72,26 @@ public class Player extends LivingEntity
 		
 		arm.init(world);
 		arm.attatch(this, ARM_OFFSET);
+		
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(width, 0.1f);
+		
+		Sensor footSensor = new Sensor(shape, new Vector2(0, -height))
+		{
+			@Override
+			public void onUncollide(GameObject other, ObjectFixture fixture)
+			{
+				numFootContacts--;
+			}
+			
+			@Override
+			public void onCollide(GameObject other, ObjectFixture fixture)
+			{
+				numFootContacts++;
+			}
+		};
+		
+		footSensor.init(getBody());
 	}
 	
 	/**
@@ -167,5 +190,11 @@ public class Player extends LivingEntity
 		{
 			return new Player(data.position, 20);
 		}
+	}
+	
+	@Override
+	public boolean isOnGround()
+	{
+		return numFootContacts == 0;
 	}
 }

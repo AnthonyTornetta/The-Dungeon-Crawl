@@ -44,14 +44,14 @@ public final class Reference
 			
 			ex.printStackTrace();
 			
-			System.out.println("Crash report saved to crashes/" + fileName);
+			System.err.println("Crash report saved to crashes/" + fileName);
 		}
 		catch (IOException ioEx)
 		{
-			System.out.println("UNABLE TO SAVE CRASH REPORT!");
-			System.out.println("Saving error:");
+			System.err.println("UNABLE TO SAVE CRASH REPORT!");
+			System.err.println("Saving error:");
 			ioEx.printStackTrace();
-			System.out.println("Crash report:");
+			System.err.println("Crash report:");
 			ex.printStackTrace();
 		}
 		

@@ -8,9 +8,11 @@ import java.util.Map;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -269,4 +271,27 @@ public final class Helper
 	}
 	
 	public static boolean isWorldLocked() { return worldLocked; }
+
+	/**
+	 * Returns a fancy String for those objects not kind enough to create their on toString() method
+	 * @param object The object to stringify (no properties will be changed)
+	 * @return A super fancy String descringing that object, but if none can be generated will just use that object's toString
+	 */
+	public static String toString(Object object)
+	{
+		if(object instanceof Fixture)
+		{
+			Fixture f = (Fixture)object;
+			
+			return "Fixture [density=" + f.getDensity() + ", friction=" + f.getFriction() + ", restitution=" + f.getRestitution() + ", shape=" + toString(f.getShape()) + "]";
+		}
+		else if(object instanceof Body)
+		{
+			Body b = (Body)object;
+			
+			return "Body [position=" + b.getPosition() + ", mass=" + b.getMass() + ", velocity=" + b.getLinearVelocity() + ", type=" + b.getType() + ", localCenter=" + b.getLocalCenter() + "]";
+		}
+		
+		return object.toString();
+	}
 }

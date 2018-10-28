@@ -6,7 +6,7 @@
 			"position":
 			{
 				"x": 0.0,
-				"y": 0.0
+				"y": -5.0
 			},
 			"dimensions":
 			{
@@ -18,22 +18,58 @@
 			"name": "platform",
 			"position":
 			{
-				"x": -39.5,
-				"y": 19.5
+				"x": -20.0,
+				"y": 15.0
 			},
 			"dimensions":
 			{
-				"x": 1,
-				"y": 20
+				"x": 1.0,
+				"y": 40.0
+			}
+		},
+		{
+			"name": "platform",
+			"position":
+			{
+				"x": 20.0,
+				"y": 15.0
+			},
+			"dimensions":
+			{
+				"x": 1.0,
+				"y": 40.0
+			}
+		},
+		{
+			"name": "platform",
+			"position":
+			{
+				"x": 0.0,
+				"y": 40.0
+			},
+			"dimensions":
+			{
+				"x": 40.0,
+				"y": 1.0
 			}
 		},
 		{
 			"name": "player",
 			"position":
 			{
-				"x": 0,
-				"y": 1.5f
+				"x": 1,
+				"y": 2
 			}
+		},
+		{
+			"name": "ball",
+			"position":
+			{
+				"x": 0,
+				"y": 1
+			},
+			"radius": 0.15f,
+			"misc": 0.7f
 		}
 	]
 }

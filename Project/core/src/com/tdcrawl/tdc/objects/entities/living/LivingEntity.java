@@ -50,4 +50,10 @@ public abstract class LivingEntity extends Entity
 	public void setMaxHealth(int h) { this.maxHealth = h; }
 	public int getHealth() { return health; }
 	public void setHealth(int amt) { this.health = amt; }
+
+	@Override
+	public String toString()
+	{
+		return "LivingEntity [health=" + health + "/" + maxHealth + "; " + super.toString() + "]";
+	}
 }
