@@ -1,4 +1,4 @@
-package com.tdcrawl.tdc.objects;
+package com.tdcrawl.tdc.objects.staticobjects;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -8,6 +8,7 @@ import com.tdcrawl.tdc.events.EventCallback;
 import com.tdcrawl.tdc.events.EventsHandler;
 import com.tdcrawl.tdc.events.types.CollisionEvent;
 import com.tdcrawl.tdc.events.types.CollisionEvent.CollisionState;
+import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.entities.living.Player;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
 import com.tdcrawl.tdc.registries.templates.ObjectData;
@@ -45,8 +46,8 @@ public class Ball extends GameObject
 		{
 			float restitution = 0.1f;
 			
-			if(data.misc != null)
-				restitution = Float.parseFloat(data.misc);
+			if(data.extraData != null && data.extraData.containsKey("restitution"))
+				restitution = Float.parseFloat((String)data.extraData.get("restitution"));
 			
 			CircleShape shape = new CircleShape();
 			shape.setRadius(data.radius);

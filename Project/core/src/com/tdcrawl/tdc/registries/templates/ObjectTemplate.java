@@ -11,7 +11,7 @@ public interface ObjectTemplate
 	/**
 	 * Creates a GameObject object based off the given data
 	 * @param data The data to base the object off of
-	 * @return The uninitialized GameObject
+	 * @return The uninitialized GameObject or null if there was an error parsing the data
 	 */
 	public GameObject create(ObjectData data);
 }

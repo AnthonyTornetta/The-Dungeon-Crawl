@@ -1,5 +1,7 @@
 package com.tdcrawl.tdc.registries.templates;
 
+import java.util.Map;
+
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -13,5 +15,5 @@ public class ObjectData
 	public Vector2 position;
 	public Vector2 dimensions;
 	public float radius;
-	public String misc;
+	public Map<String, Object> extraData;
 }

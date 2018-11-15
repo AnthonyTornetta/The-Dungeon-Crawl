@@ -1,6 +1,10 @@
 package com.tdcrawl.tdc.objects;
 
 import com.tdcrawl.tdc.objects.entities.living.Player;
+import com.tdcrawl.tdc.objects.staticobjects.Ball;
+import com.tdcrawl.tdc.objects.staticobjects.ItemObject;
+import com.tdcrawl.tdc.objects.staticobjects.Platform;
+import com.tdcrawl.tdc.objects.staticobjects.Rectangle;
 import com.tdcrawl.tdc.registries.ObjectRegistry;
 
 /**
@@ -17,5 +21,6 @@ public class Objects
 		ObjectRegistry.registerObject("platform", new Platform.PlatformTemplate());
 		ObjectRegistry.registerObject("player", new Player.PlayerTemplate());
 		ObjectRegistry.registerObject("ball", new Ball.BallTemplate());
+		ObjectRegistry.registerObject("item", new ItemObject.ItemObjectTemplate());
 	}
 }

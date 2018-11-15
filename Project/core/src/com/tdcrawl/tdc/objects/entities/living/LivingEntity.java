@@ -1,17 +1,27 @@
 package com.tdcrawl.tdc.objects.entities.living;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Shape;
+import com.tdcrawl.tdc.items.inventory.Inventory;
 import com.tdcrawl.tdc.objects.entities.Entity;
+import com.tdcrawl.tdc.objects.entities.living.types.EntityType;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
 
+/**
+ * An Entity, but with health and items!
+ * @see Entity
+ * @author Cornchip
+ */
 public abstract class LivingEntity extends Entity
 {
 	private int health, maxHealth;
 	
+	private Inventory inventory;
+	
 	/**
-	 * @see Entity
+	 * @see Entity#Entity(Shape, Vector2, BodyType, float, float, float, float, boolean, boolean, boolean)
+	 * @param maxHealth The maximum health the LivingEntity can have
 	 */
 	public LivingEntity(Shape shape, Vector2 position, BodyType type, float density, float restitution, float friction,
 			float angle, boolean bullet, boolean fixedRotation, boolean collidable, Vector2 centerPoint, int maxHealth)
@@ -22,6 +32,10 @@ public abstract class LivingEntity extends Entity
 		this.health = maxHealth;
 	}
 	
+	/**
+	 * @see Entity#Entity(Shape, Vector2, BodyType, float, float, float, float, boolean, boolean, boolean, Vector2)
+	 * @param maxHealth The maximum health the LivingEntity can have
+	 */
 	public LivingEntity(Shape shape, Vector2 position, BodyType type, float density, float restitution, float friction,
 			float angle, boolean bullet, boolean fixedRotation, boolean collidable, int maxHealth)
 	{
@@ -31,6 +45,10 @@ public abstract class LivingEntity extends Entity
 		this.health = maxHealth;
 	}
 	
+	/**
+	 * @see Entity#Entity(Vector2, BodyType, float, boolean, boolean, boolean, ObjectFixture)
+	 * @param maxHealth The maximum health the LivingEntity can have
+	 */
 	public LivingEntity(Vector2 position, BodyType type, float angle, boolean bullet, boolean fixedRotation,
 			boolean collidable, ObjectFixture centerFixture, int maxHealth)
 	{
@@ -39,6 +57,10 @@ public abstract class LivingEntity extends Entity
 		this.maxHealth = maxHealth;
 		this.health = maxHealth;
 	}
+	
+	// Getters & Setters //
+	
+	public abstract EntityType getEntityType();
 	
 	public void takeDamage(int amt) { health -= amt; }
 	public void heal(int amt) { health += amt; }
@@ -51,6 +73,9 @@ public abstract class LivingEntity extends Entity
 	public int getHealth() { return health; }
 	public void setHealth(int amt) { this.health = amt; }
 
+	public Inventory getInventory() { return inventory; }
+	public void setInventory(Inventory inventory) { this.inventory = inventory; }
+	
 	@Override
 	public String toString()
 	{

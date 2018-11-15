@@ -280,6 +280,7 @@ public abstract class GameObject
 	}
 	
 	/**
+	 * Sometimes works :/
 	 * Tells if you are on the ground based off your Y velocity
 	 * Since y velocity is almost never 0 if it's not on the ground, this works pretty much every time and is more efficient than checking for collision
 	 * @return True if y velocity is 0, false if not

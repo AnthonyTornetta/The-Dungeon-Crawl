@@ -1,9 +1,10 @@
-package com.tdcrawl.tdc.objects;
+package com.tdcrawl.tdc.objects.staticobjects;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
+import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.registries.templates.ObjectData;
 import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
 
@@ -38,8 +39,8 @@ public class Rectangle extends GameObject
 			shape.setAsBox(data.dimensions.x, data.dimensions.y);
 			
 			float restitution = 0.1f;
-			if(data.misc != null)
-				restitution = Float.parseFloat(data.misc);
+			if(data.extraData != null && data.extraData.containsKey("restitution"))
+				restitution = (Float) data.extraData.get("restitution");
 			
 			return new Rectangle(shape, data.position, 5.0f, restitution, 0.1f, 0);
 		}

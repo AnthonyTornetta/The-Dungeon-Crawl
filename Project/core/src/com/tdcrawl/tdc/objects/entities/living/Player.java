@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.bodyparts.Arm;
+import com.tdcrawl.tdc.objects.entities.living.types.EntityType;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
 import com.tdcrawl.tdc.objects.fixtures.Sensor;
 import com.tdcrawl.tdc.registries.templates.ObjectData;
@@ -40,11 +41,8 @@ public class Player extends LivingEntity
 	
 	private static final Vector2 ARM_OFFSET = new Vector2(0f, height - 0.2f);
 	
-	private int numFootContacts = 0;
+	private int numFootContacts = 0; // Foot collision (not working)
 	
-	/**
-	 * For debug usage
-	 */
 	private ShapeRenderer sr = new ShapeRenderer();
 	
 	public Player(Vector2 position, int maxHealth)
@@ -126,6 +124,7 @@ public class Player extends LivingEntity
 			}
 		}
 		
+		// Draws a fancy line to ur cursor based off where ur arm starts
 		if(Reference.isDebug() && cam != null)
 		{
 	        sr.setColor(Color.RED);
@@ -138,9 +137,10 @@ public class Player extends LivingEntity
 	        sr.end();
 		}
 		
+		// Resets you to where the player started
 		if(Gdx.input.isKeyPressed(Input.Keys.R))
 		{
-			setPosition(Helper.clone(startPos));
+			setPosition(startPos);
 			getBody().setLinearVelocity(0, 0);
 		}
 		
@@ -193,8 +193,11 @@ public class Player extends LivingEntity
 	}
 	
 	@Override
-	public boolean isOnGround()
+	public boolean isOnGround() // Doesn't work ;(
 	{
 		return numFootContacts == 0;
 	}
+	
+	@Override
+	public EntityType getEntityType() { return EntityType.PASSIVE; }
 }

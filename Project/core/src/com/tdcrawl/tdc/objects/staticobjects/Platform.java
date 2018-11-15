@@ -1,8 +1,9 @@
-package com.tdcrawl.tdc.objects;
+package com.tdcrawl.tdc.objects.staticobjects;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.registries.templates.ObjectData;
 import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
 import com.badlogic.gdx.physics.box2d.Shape;

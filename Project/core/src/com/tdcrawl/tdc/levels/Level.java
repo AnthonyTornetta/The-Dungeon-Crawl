@@ -62,6 +62,7 @@ public class Level
 		
 		world = new World(new Vector2(0, -9.8f), true);
 		
+		// Handles any collision events that happen in the world
 		world.setContactListener(new ContactListener()
 			{
 				@Override
@@ -70,6 +71,8 @@ public class Level
 					if(contact.getFixtureA().getBody().getUserData() instanceof GameObject && 
 							contact.getFixtureB().getBody().getUserData() instanceof GameObject)
 					{
+						// Checks if it's 2 game objects colliding, and if it is call a new event
+						
 						GameObject obj1 = (GameObject) contact.getFixtureA().getBody().getUserData();
 						GameObject obj2 = (GameObject) contact.getFixtureB().getBody().getUserData();
 						
@@ -79,13 +82,15 @@ public class Level
 						EventsHandler.call(new CollisionEvent(obj1, obj2, fix1, fix2, CollisionState.BEGIN_COLLISION));
 					}
 				}
-				
+				 
 				@Override
 				public void endContact(Contact contact)
 				{
 					if(contact.getFixtureA().getBody().getUserData() instanceof GameObject && 
 							contact.getFixtureB().getBody().getUserData() instanceof GameObject)
 					{
+						// Checks if it's 2 game objects colliding, and if it is call a new event
+						
 						GameObject obj1 = (GameObject) contact.getFixtureA().getBody().getUserData();
 						GameObject obj2 = (GameObject) contact.getFixtureB().getBody().getUserData();
 						
@@ -95,7 +100,9 @@ public class Level
 						EventsHandler.call(new CollisionEvent(obj1, obj2, fix1, fix2, CollisionState.END_COLLISION));
 					}
 				}
-
+				
+				// The below methods are just weird and are called in between the two methods above.
+				
 				@Override
 				public void preSolve(Contact contact, Manifold oldManifold)
 				{

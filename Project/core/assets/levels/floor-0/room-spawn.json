@@ -34,6 +34,18 @@
 				"x": 5,
 				"y": 5
 			}
+		},
+		{
+			"name": "item",
+			"position":
+			{
+				"x": 0,
+				"y": 5
+			},
+			"extraData":
+			{
+				"itemId": "testItem"
+			}
 		}
 	]
 }
