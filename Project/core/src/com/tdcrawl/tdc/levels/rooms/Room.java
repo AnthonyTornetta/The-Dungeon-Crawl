@@ -1,4 +1,4 @@
-package com.tdcrawl.tdc.room;
+package com.tdcrawl.tdc.levels.rooms;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -14,7 +14,7 @@ public final class Reference
 	public static final int WINDOW_WIDTH = 720;
 	public static final int WINDOW_HEIGHT = 480;
 	public static final int FPS = 60;
-	public static final String NAME = "Destroy the Caverns";
+	public static final String NAME = "The Dungeon Crawl";
 	
 	public static void handleError(Throwable ex)
 	{

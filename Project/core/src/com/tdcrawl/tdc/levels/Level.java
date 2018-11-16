@@ -22,12 +22,12 @@ import com.tdcrawl.tdc.events.EventCallback;
 import com.tdcrawl.tdc.events.EventsHandler;
 import com.tdcrawl.tdc.events.types.CollisionEvent;
 import com.tdcrawl.tdc.events.types.CollisionEvent.CollisionState;
+import com.tdcrawl.tdc.levels.rooms.Room;
+import com.tdcrawl.tdc.levels.rooms.RoomBuilder;
 import com.tdcrawl.tdc.events.types.WorldLockChangeEvent;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.entities.living.Player;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
-import com.tdcrawl.tdc.room.Room;
-import com.tdcrawl.tdc.room.RoomBuilder;
 import com.tdcrawl.tdc.util.Helper;
 
 /**
