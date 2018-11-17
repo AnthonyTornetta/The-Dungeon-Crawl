@@ -1,4 +1,4 @@
-package com.tdcrawl.tdc.events.exceptions;
+package com.tdcrawl.tdc.exceptions;
 
 public class UnregisteredEventException extends RuntimeException
 {
