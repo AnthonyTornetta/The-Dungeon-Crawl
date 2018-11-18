@@ -41,7 +41,8 @@ public class Player extends LivingEntity
 	
 	private static final Vector2 ARM_OFFSET = new Vector2(0f, height - 0.2f);
 	
-	private boolean isOnGround = false; //Might not want to call isOnGround() in this class, might not work.
+	private int numFootContacts = 0; // Foot collision (not working)
+	//private boolean isOnGround = false; //Might not want to call isOnGround() in this class, might not work.
 	
 	private ShapeRenderer sr = new ShapeRenderer();
 	
@@ -72,20 +73,22 @@ public class Player extends LivingEntity
 		arm.attatch(this, ARM_OFFSET);
 		
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width, 0.1f);
+		shape.setAsBox(width - 0.15f, 0.05f);
 		
-		Sensor footSensor = new Sensor(shape, new Vector2(0, -height))
+		Sensor footSensor = new Sensor(shape, new Vector2(0,  -height))
 		{
 			@Override
 			public void onUncollide(GameObject other, ObjectFixture fixture)
 			{
-				isOnGround = false;
+				numFootContacts--;
+				//isOnGround = false;
 			}
 			
 			@Override
 			public void onCollide(GameObject other, ObjectFixture fixture)
 			{
-				isOnGround = true;
+				numFootContacts++;
+				//isOnGround = true;
 			}
 		};
 		
@@ -158,9 +161,9 @@ public class Player extends LivingEntity
 		{			
 			if(timeSinceLastJump >= TIME_BETWEEN_JUMPS)
 			{
-				if(inAirJumps < JUMPS_ALLOWED_IN_AIR || isOnGround)
+				if(inAirJumps < JUMPS_ALLOWED_IN_AIR || this.isOnGround())
 				{
-					if(!isOnGround)
+					if(!this.isOnGround())
 					{
 						inAirJumps++;
 					}
@@ -193,6 +196,12 @@ public class Player extends LivingEntity
 		{
 			return new Player(data.position, 20);
 		}
+	}
+	
+	@Override
+	public boolean isOnGround() // Doesn't work ;(
+	{
+		return numFootContacts == 1;
 	}
 	
 	@Override
