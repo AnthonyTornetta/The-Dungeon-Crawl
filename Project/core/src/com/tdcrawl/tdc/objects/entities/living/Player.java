@@ -24,9 +24,9 @@ import com.tdcrawl.tdc.util.Reference;
 public class Player extends LivingEntity
 {
 	private final float ACCELERATION = 10.0f; // x m/s^2
-	private final float JUMP_STRENGTH = 5.0f; // acceleration applied when jump occurs
-	private final int JUMPS_ALLOWED_IN_AIR = 1;
-	private final float TIME_BETWEEN_JUMPS = 0.25f;
+	private final float JUMP_STRENGTH = 6.5f; // acceleration applied when jump occurs
+	private final int JUMPS_ALLOWED_IN_AIR = 2;
+	private final float TIME_BETWEEN_JUMPS = 0.4f;
 	
 	private Vector2 startPos;
 	
@@ -41,7 +41,7 @@ public class Player extends LivingEntity
 	
 	private static final Vector2 ARM_OFFSET = new Vector2(0f, height - 0.2f);
 	
-	private int numFootContacts = 0; // Foot collision (not working)
+	private boolean isOnGround = false; //Might not want to call isOnGround() in this class, might not work.
 	
 	private ShapeRenderer sr = new ShapeRenderer();
 	
@@ -79,13 +79,13 @@ public class Player extends LivingEntity
 			@Override
 			public void onUncollide(GameObject other, ObjectFixture fixture)
 			{
-				numFootContacts--;
+				isOnGround = false;
 			}
 			
 			@Override
 			public void onCollide(GameObject other, ObjectFixture fixture)
 			{
-				numFootContacts++;
+				isOnGround = true;
 			}
 		};
 		
@@ -158,10 +158,13 @@ public class Player extends LivingEntity
 		{			
 			if(timeSinceLastJump >= TIME_BETWEEN_JUMPS)
 			{
-				if(inAirJumps < JUMPS_ALLOWED_IN_AIR || this.isOnGround())
+				if(inAirJumps < JUMPS_ALLOWED_IN_AIR || isOnGround)
 				{
-					if(!this.isOnGround())
+					if(!isOnGround)
+					{
 						inAirJumps++;
+					}
+					
 					timeSinceLastJump = 0;
 					acceleration.y += JUMP_STRENGTH;
 				}
@@ -190,12 +193,6 @@ public class Player extends LivingEntity
 		{
 			return new Player(data.position, 20);
 		}
-	}
-	
-	@Override
-	public boolean isOnGround() // Doesn't work ;(
-	{
-		return numFootContacts == 0;
 	}
 	
 	@Override
