@@ -32,6 +32,8 @@ public class CollisionEvent extends Event
 		
 		this.fix1 = fix1;
 		this.fix2 = fix2;
+		
+		this.state = state;
 	}
 	
 	// Getters & Setters //

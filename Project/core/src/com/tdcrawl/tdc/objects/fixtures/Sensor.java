@@ -24,6 +24,8 @@ public abstract class Sensor extends ObjectFixture
 				
 				if(data instanceof Sensor)
 				{
+					System.out.println("AYE");
+					
 					if(event.getState() == CollisionState.BEGIN_COLLISION)
 						((Sensor)data).onCollide(event.getObject2(), event.getFixture2());
 					else if(event.getState() == CollisionState.END_COLLISION)

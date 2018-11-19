@@ -25,7 +25,7 @@ public class Player extends LivingEntity
 {
 	private final float ACCELERATION = 10.0f; // x m/s^2
 	private final float JUMP_STRENGTH = 6.5f; // acceleration applied when jump occurs
-	private final int JUMPS_ALLOWED_IN_AIR = 2;
+	private final int JUMPS_ALLOWED_IN_AIR = 1;
 	private final float TIME_BETWEEN_JUMPS = 0.4f;
 	
 	private Vector2 startPos;
@@ -73,16 +73,13 @@ public class Player extends LivingEntity
 		arm.attatch(this, ARM_OFFSET);
 		
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width - 0.15f, 0.05f);
-		
-		System.out.println("ASDF");
+		shape.setAsBox(width - 0.05f, 0.05f);
 		
 		Sensor footSensor = new Sensor(shape, new Vector2(0,  -height))
 		{
 			@Override
 			public void onUncollide(GameObject other, ObjectFixture fixture)
 			{
-				System.out.println("UNCOLLIdED");
 				numFootContacts--;
 				//isOnGround = false;
 			}
@@ -90,7 +87,6 @@ public class Player extends LivingEntity
 			@Override
 			public void onCollide(GameObject other, ObjectFixture fixture)
 			{
-				System.out.println("COLLIDED");
 				numFootContacts++;
 				//isOnGround = true;
 			}
@@ -203,9 +199,9 @@ public class Player extends LivingEntity
 	}
 	
 	@Override
-	public boolean isOnGround() // Doesn't work ;(
+	public boolean isOnGround()
 	{
-		return numFootContacts == 1;
+		return numFootContacts >= 1;
 	}
 	
 	@Override
