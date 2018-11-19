@@ -47,6 +47,4 @@ public abstract class Sensor extends ObjectFixture
 	{
 		return "Sensor [" + super.toString() + "]";
 	}
-	
-	
 }

@@ -75,11 +75,14 @@ public class Player extends LivingEntity
 		PolygonShape shape = new PolygonShape();
 		shape.setAsBox(width - 0.15f, 0.05f);
 		
+		System.out.println("ASDF");
+		
 		Sensor footSensor = new Sensor(shape, new Vector2(0,  -height))
 		{
 			@Override
 			public void onUncollide(GameObject other, ObjectFixture fixture)
 			{
+				System.out.println("UNCOLLIdED");
 				numFootContacts--;
 				//isOnGround = false;
 			}
@@ -87,6 +90,7 @@ public class Player extends LivingEntity
 			@Override
 			public void onCollide(GameObject other, ObjectFixture fixture)
 			{
+				System.out.println("COLLIDED");
 				numFootContacts++;
 				//isOnGround = true;
 			}
@@ -205,5 +209,5 @@ public class Player extends LivingEntity
 	}
 	
 	@Override
-	public EntityType getEntityType() { return EntityType.PASSIVE; }
+	public EntityType getEntityType() { return EntityType.PLAYER; }
 }

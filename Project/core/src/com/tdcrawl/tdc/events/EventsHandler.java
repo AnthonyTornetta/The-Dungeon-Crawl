@@ -20,7 +20,7 @@ public class EventsHandler
 	 */
 	public static void call(Event e)
 	{
-		List<EventCallback> subs = subscribers.get(e.getId());
+		List<EventCallback> subs = subscribers.get(e.getId()); 
 		
 		// If subs == null, this event was never registered so throw an exception to prevent logic errors
 		if(subs == null)

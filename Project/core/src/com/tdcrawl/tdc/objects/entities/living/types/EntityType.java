@@ -4,6 +4,6 @@ public enum EntityType
 {
 	HOSTILE,
 	NEUTRAL,
-	PASSIVE,
+	FRIENDLY,
 	PLAYER
 }
