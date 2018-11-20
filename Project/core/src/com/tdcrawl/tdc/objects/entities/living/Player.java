@@ -78,17 +78,17 @@ public class Player extends LivingEntity
 		Sensor footSensor = new Sensor(shape, new Vector2(0,  -height))
 		{
 			@Override
-			public void onUncollide(GameObject other, ObjectFixture fixture)
-			{
-				numFootContacts--;
-				//isOnGround = false;
-			}
-			
-			@Override
 			public void onCollide(GameObject other, ObjectFixture fixture)
 			{
 				numFootContacts++;
 				//isOnGround = true;
+			}
+			
+			@Override
+			public void onUncollide(GameObject other, ObjectFixture fixture)
+			{
+				numFootContacts--;
+				//isOnGround = false;
 			}
 		};
 		

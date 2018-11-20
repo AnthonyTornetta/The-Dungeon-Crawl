@@ -15,7 +15,7 @@ public class TestItem extends Item
 	}
 
 	@Override
-	public void use(LivingEntity by, UseType type)
+	public void use(LivingEntity by, LivingEntity on, UseType type)
 	{
 		System.out.print("Item Used (");
 		

@@ -8,7 +8,7 @@ public abstract class Item
 {
 	/**
 	 * Returns the dimensions for the item when someone will hold them (assuming no scaling)
-	 * @return The dimensions for the item when someone will hold them
+	 * @return The dimensions for the item when someone will hold them (assuming no scaling)
 	 */
 	public abstract Vector2 getDimensions();
 	
@@ -25,7 +25,13 @@ public abstract class Item
 	 */
 	public void tick(float delta, Camera cam) {}
 	
-	public abstract void use(LivingEntity by, UseType type);
+	/**
+	 * Called whenever the item should be used
+	 * @param by Who it was used bu
+	 * @param on Who it was used on OR the same as by if it is being used on the caster
+	 * @param type The type of use
+	 */
+	public abstract void use(LivingEntity by, LivingEntity on, UseType type);
 	
 	public enum UseType
 	{
