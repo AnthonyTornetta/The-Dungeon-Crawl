@@ -252,6 +252,7 @@ public class Level
 	}
 	
 	// Getters & Setters //
-
+	
 	public World getWorld() { return world; }
+	public Player getPlayer() { return player; }
 }

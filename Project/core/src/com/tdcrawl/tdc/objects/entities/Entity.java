@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Shape;
+import com.tdcrawl.tdc.levels.rooms.Room;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
 
@@ -12,6 +13,11 @@ import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
  */
 public abstract class Entity extends GameObject
 {
+	/**
+	 * The room the entity is currently in
+	 */
+	private Room room;
+	
 	/**
 	 * Creates an Entity with all the information needed to initialize it when ready
 	 * @param shape The shape the object will have
@@ -74,4 +80,9 @@ public abstract class Entity extends GameObject
 	 * @param cam The camera used to render the game
 	 */
 	public abstract void tick(float delta, Camera cam);
+	
+	// Getters & Setters //
+	
+	public void setRoom(Room room) { this.room = room; }
+	public Room getRoom() { return room; }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.tdcrawl.tdc.objects.GameObject;
+import com.tdcrawl.tdc.objects.entities.Entity;
 import com.tdcrawl.tdc.registries.ObjectRegistry;
 import com.tdcrawl.tdc.registries.templates.ObjectData;
 import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
@@ -44,7 +45,11 @@ public class RoomBuilder
 		Room room = new Room();
 		
 		for(GameObject o : objects)
+		{
 			room.addObject(o);
+			if(o instanceof Entity)
+				((Entity)o).setRoom(room);
+		}
 		
 		return room;
 	}
