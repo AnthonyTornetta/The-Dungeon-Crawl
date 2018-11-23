@@ -27,8 +27,8 @@ public abstract class Item
 	
 	/**
 	 * Called whenever the item should be used
-	 * @param by Who it was used bu
-	 * @param on Who it was used on OR the same as by if it is being used on the caster
+	 * @param by Who it was used by
+	 * @param on Whom it was used on OR the same as by if it is being used on the caster
 	 * @param type The type of use
 	 */
 	public abstract void use(LivingEntity by, LivingEntity on, UseType type);

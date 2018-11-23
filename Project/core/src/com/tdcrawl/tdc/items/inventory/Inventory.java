@@ -34,14 +34,14 @@ public interface Inventory
 	 * @param i The item to search for
 	 * @return The index of an item in the inventory based off slot indexes, or -1 if not present
 	 */
-	public int getIndexOf(Item i);
+	public int getIndexOf(Item item);
 	
 	/**
 	 * Checks if the inventory contains a given item (regardless of number of items)
 	 * @param i The item to check for
 	 * @return True if it contains it, false if not
 	 */
-	public boolean containsItem(Item i);
+	public boolean containsItem(Item item);
 	
 	/**
 	 * Removes all items in the inventory

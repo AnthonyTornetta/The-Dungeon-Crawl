@@ -20,6 +20,7 @@ import com.tdcrawl.tdc.registries.templates.ObjectData;
 import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
 import com.tdcrawl.tdc.util.Helper;
 import com.tdcrawl.tdc.util.Reference;
+import com.tdcrawl.tdc.items.inventory.PlayerInventory;
 
 public class Player extends LivingEntity
 {
@@ -41,8 +42,9 @@ public class Player extends LivingEntity
 	
 	private static final Vector2 ARM_OFFSET = new Vector2(0f, height - 0.2f);
 	
-	private int numFootContacts = 0; // Foot collision (not working)
-	//private boolean isOnGround = false; //Might not want to call isOnGround() in this class, might not work.
+	private int numFootContacts = 0;
+	
+	private PlayerInventory inventory;
 	
 	private ShapeRenderer sr = new ShapeRenderer();
 	
@@ -81,14 +83,12 @@ public class Player extends LivingEntity
 			public void onCollide(GameObject other, ObjectFixture fixture)
 			{
 				numFootContacts++;
-				//isOnGround = true;
 			}
 			
 			@Override
 			public void onUncollide(GameObject other, ObjectFixture fixture)
 			{
 				numFootContacts--;
-				//isOnGround = false;
 			}
 		};
 		
