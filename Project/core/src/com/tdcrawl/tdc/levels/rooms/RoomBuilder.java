@@ -73,34 +73,28 @@ public class RoomBuilder
 		
 		if(enclosed)
 		{
-			System.out.println("aye");
-			
 			Vector2 dimensions = room.getDimensions();
-			
-			System.out.println(dimensions);
 			
 			PolygonShape wall1Shape = new PolygonShape();
 			wall1Shape.setAsBox(dimensions.x, 0.2f);
-			Platform wall1 = new Platform(wall1Shape, dimensions.cpy().add(0, dimensions.y), 0.6f, 0.0f);
+			Platform wall1 = new Platform(wall1Shape, offset.cpy().add(0, dimensions.y), 0.6f, 0.0f);
 			
 			PolygonShape wall2Shape = new PolygonShape();
 			wall2Shape.setAsBox(dimensions.x, 0.2f);
-			Platform wall2 = new Platform(wall2Shape, dimensions.cpy().sub(0, dimensions.y), 0.6f, dimensions.y);
+			Platform wall2 = new Platform(wall2Shape, offset.cpy().sub(0, dimensions.y), 0.6f, dimensions.y);
 			
 			PolygonShape wall3Shape = new PolygonShape();
 			wall3Shape.setAsBox(0.2f, dimensions.y);
-			Platform wall3 = new Platform(wall3Shape, dimensions.cpy().add(dimensions.x, 0), 0.6f, 0.0f);
+			Platform wall3 = new Platform(wall3Shape, offset.cpy().add(dimensions.x, 0), 0.6f, 0.0f);
 			
 			PolygonShape wall4Shape = new PolygonShape();
 			wall4Shape.setAsBox(0.2f, dimensions.y);
-			Platform wall4 = new Platform(wall4Shape, dimensions.cpy().sub(dimensions.x, 0), 0.6f, 0.0f);
+			Platform wall4 = new Platform(wall4Shape, offset.cpy().sub(dimensions.x, 0), 0.6f, 0.0f);
 			
 			room.addObject(wall1);
 			room.addObject(wall2);
 			room.addObject(wall3);
 			room.addObject(wall4);
-			
-			System.out.println(room.getObjectsInRoom());
 		}
 		return room;
 	}

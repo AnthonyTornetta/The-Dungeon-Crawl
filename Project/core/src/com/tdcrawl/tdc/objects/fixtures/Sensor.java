@@ -20,15 +20,23 @@ public abstract class Sensor extends ObjectFixture
 			{
 				CollisionEvent event = (CollisionEvent)e;
 				
+				// Checks if either of the events were sensors, and if so fire those events
 				Object data = event.getFixture2() != null ? event.getFixture2().getFixture().getUserData() : null;
 				
-				if(data instanceof Sensor)
+				if(!(data instanceof Sensor))
 				{
-					if(event.getState() == CollisionState.BEGIN_COLLISION)
-						((Sensor)data).onCollide(event.getObject2(), event.getFixture2());
-					else if(event.getState() == CollisionState.END_COLLISION)
-						((Sensor)data).onUncollide(event.getObject2(), event.getFixture2());
+					data = event.getFixture1() != null ? event.getFixture1().getFixture().getUserData() : null;
+
+					if(!(data instanceof Sensor))
+					{
+						return; // Neither is a sensor, so just stop
+					}
 				}
+				
+				if(event.getState() == CollisionState.BEGIN_COLLISION)
+					((Sensor)data).onCollide(event.getObject2(), event.getFixture2());
+				else if(event.getState() == CollisionState.END_COLLISION)
+					((Sensor)data).onUncollide(event.getObject2(), event.getFixture2());
 			}
 		});
 	}
