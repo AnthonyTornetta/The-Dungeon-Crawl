@@ -4,5 +4,8 @@ import com.tdcrawl.tdc.items.items.weapons.Weapon;
 
 public abstract class RangedWeapon extends Weapon
 {
-
+	public RangedWeapon(int d)
+	{
+		super(d);
+	}
 }

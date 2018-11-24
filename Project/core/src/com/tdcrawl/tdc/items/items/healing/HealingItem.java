@@ -8,6 +8,12 @@ public abstract class HealingItem extends Item
 	private int healingValue;
 	private int passiveHeal;
 	
+	public HealingItem(int h, int p)
+	{
+		healingValue = h;
+		passiveHeal = p;
+	}
+	
 	@Override
 	/**
 	 * Called whenever the item should be used

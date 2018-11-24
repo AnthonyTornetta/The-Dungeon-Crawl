@@ -20,6 +20,7 @@ import com.tdcrawl.tdc.registries.templates.ObjectData;
 import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
 import com.tdcrawl.tdc.util.Helper;
 import com.tdcrawl.tdc.util.Reference;
+import com.tdcrawl.tdc.items.Item;
 import com.tdcrawl.tdc.items.inventory.PlayerInventory;
 
 public class Player extends LivingEntity
@@ -39,12 +40,14 @@ public class Player extends LivingEntity
 	private static final float width = 0.2f;
 	
 	private Arm arm;
+	private Sensor itemSensor;
 	
 	private static final Vector2 ARM_OFFSET = new Vector2(0f, height - 0.2f);
 	
 	private int numFootContacts = 0;
 	
 	private PlayerInventory inventory;
+	private Item heldItem;
 	
 	private ShapeRenderer sr = new ShapeRenderer();
 	
@@ -59,6 +62,8 @@ public class Player extends LivingEntity
 		ObjectFixture head = new ObjectFixture(true, 1.5f, 0.1f, 0.05f, headShape, new Vector2(0, height + headRadius));
 		
 		this.addFixture(head);
+		
+		inventory = new PlayerInventory();
 	}
 	
 	@Override
@@ -93,6 +98,8 @@ public class Player extends LivingEntity
 		};
 		
 		footSensor.init(getBody());
+		
+		switchItem(0, true);
 	}
 	
 	/**
@@ -174,7 +181,59 @@ public class Player extends LivingEntity
 			}
 		}
 		
+		if(Gdx.input.isKeyPressed(Input.Keys.NUM_1) && !heldItem.equals(inventory.getItems()[0]))
+		{
+			switchItem(0, false);
+		}
+		
+		if(Gdx.input.isKeyPressed(Input.Keys.NUM_2) && !heldItem.equals(inventory.getItems()[1]))
+		{
+			switchItem(1, false);
+		}
+		
+		if(Gdx.input.isKeyPressed(Input.Keys.NUM_3) && !heldItem.equals(inventory.getItems()[2]))
+		{
+			switchItem(2, false);
+		}
+		
 		getBody().setLinearVelocity(getBody().getLinearVelocity().add(acceleration));
+	}
+	
+	private void switchItem(int itemSlot, boolean initial)
+	{
+		heldItem = inventory.getItems()[itemSlot];
+		
+		if(!initial)
+		{	
+			Helper.removeFixture(itemSensor);
+		}
+		
+		PolygonShape item = new PolygonShape();
+		if(heldItem == null)
+		{
+			item.setAsBox(0, 0);
+		}
+		else
+		{
+			item.setAsBox(heldItem.getDimensions().x, heldItem.getDimensions().y);
+		}
+		
+		itemSensor = new Sensor(item, new Vector2(1.2f, 0.8f))
+		{
+			@Override
+			public void onCollide(GameObject other, ObjectFixture fixture)
+			{
+				System.out.println("OUCH");
+			}
+			
+			@Override
+			public void onUncollide(GameObject other, ObjectFixture fixture)
+			{
+				System.out.println("Thanks");
+			}
+		};
+		
+		Helper.addFixture(itemSensor, this);
 	}
 
 	@Override
