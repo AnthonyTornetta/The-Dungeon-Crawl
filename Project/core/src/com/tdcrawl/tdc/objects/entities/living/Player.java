@@ -98,7 +98,7 @@ public class Player extends LivingEntity
 		};
 		
 		footSensor.init(getBody());
-		
+
 		switchItem(0, true);
 	}
 	
@@ -211,7 +211,7 @@ public class Player extends LivingEntity
 		PolygonShape item = new PolygonShape();
 		if(heldItem == null)
 		{
-			item.setAsBox(0, 0);
+			item.setAsBox(0.2f, 0.2f);
 		}
 		else
 		{
