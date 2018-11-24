@@ -7,24 +7,24 @@
 	"objects":
 	[
 		{
-			"name": "platform",
-			"position":
-			{
-				"x": 0,
-				"y": -20f
-			},
-			"dimensions":
-			{
-				"x": 20f,
-				"y": 0.6f
-			}
-		},
-		{
 			"name": "player",
 			"position":
 			{
-				"x": 0,
-				"y": -20f
+				"x": 10,
+				"y": 10
+			}
+		},
+		{
+			"name": "ball",
+			"position":
+			{
+				"x": 10,
+				"y": 10
+			},
+			"radius": "0.8f",
+			"extraData":
+			{
+				"restitution": "0.7f"
 			}
 		},
 		{
@@ -32,7 +32,46 @@
 			"position":
 			{
 				"x": 0,
-				"y": 1
+				"y": 2
+			},
+			"radius": "0.8f",
+			"extraData":
+			{
+				"restitution": "0.7f"
+			}
+		},
+		{
+			"name": "ball",
+			"position":
+			{
+				"x": 0,
+				"y": 3
+			},
+			"radius": "0.8f",
+			"extraData":
+			{
+				"restitution": "0.7f"
+			}
+		},
+		{
+			"name": "ball",
+			"position":
+			{
+				"x": 0,
+				"y": 4
+			},
+			"radius": "0.8f",
+			"extraData":
+			{
+				"restitution": "0.7f"
+			}
+		},
+		{
+			"name": "ball",
+			"position":
+			{
+				"x": 0,
+				"y": 5
 			},
 			"radius": "0.8f",
 			"extraData":

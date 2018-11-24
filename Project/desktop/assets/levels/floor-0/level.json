@@ -1,4 +1,8 @@
 {
 	"name": "floor-1",
-	
+	"roomAmountXY":
+	{
+		"x": 6,
+		"y": 6
+	}
 }

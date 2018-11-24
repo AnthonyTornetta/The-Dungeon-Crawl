@@ -9,8 +9,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.tdcrawl.tdc.items.Item;
+import com.tdcrawl.tdc.items.inventory.PlayerInventory;
+import com.tdcrawl.tdc.items.items.weapons.melee.Sword;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.bodyparts.Arm;
 import com.tdcrawl.tdc.objects.entities.living.types.EntityType;
@@ -20,10 +24,7 @@ import com.tdcrawl.tdc.registries.templates.ObjectData;
 import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
 import com.tdcrawl.tdc.util.Helper;
 import com.tdcrawl.tdc.util.Reference;
-import com.tdcrawl.tdc.items.Item;
-import com.tdcrawl.tdc.items.inventory.PlayerInventory;
-import com.tdcrawl.tdc.items.items.TestItem;
-import com.tdcrawl.tdc.items.items.weapons.melee.Sword;
+import com.tdcrawl.tdc.util.UserDataParser;
 
 public class Player extends LivingEntity
 {
@@ -52,6 +53,8 @@ public class Player extends LivingEntity
 	private Item heldItem;
 	
 	private ShapeRenderer sr = new ShapeRenderer();
+	
+	private boolean flying = false, noclip = false; // I did this to test stuff dan, dont worry about it (press f or c to activate them respectively)
 	
 	public Player(Vector2 position, int maxHealth)
 	{
@@ -150,10 +153,26 @@ public class Player extends LivingEntity
 		}
 		
 		// Resets you to where the player started
-		if(Gdx.input.isKeyPressed(Input.Keys.R))
+		if(Reference.isDebug())
 		{
-			setPosition(startPos);
-			getBody().setLinearVelocity(0, 0);
+			if(Gdx.input.isKeyPressed(Input.Keys.R))
+			{
+				setPosition(startPos);
+				getBody().setLinearVelocity(0, 0);
+			}
+			if(Gdx.input.isKeyJustPressed(Input.Keys.F))
+				flying = !flying;
+			if(Gdx.input.isKeyJustPressed(Input.Keys.C)) // WARNING: Once this is turned on then off again, sensors and anything else that was set to no collide WILL become collidable.
+				// And I really dont feel the need to create a list of noncollidable fixtures and check them when undoing the noclip.
+			{
+				noclip = !noclip;
+				
+				for(Fixture f : getBody().getFixtureList())
+				{
+				    if(!(UserDataParser.getObjectFixture(f) instanceof Sensor))
+				        f.setSensor(noclip);
+				}
+			}
 		}
 		
 		Vector2 acceleration = new Vector2();
@@ -170,7 +189,7 @@ public class Player extends LivingEntity
 		{			
 			if(timeSinceLastJump >= TIME_BETWEEN_JUMPS)
 			{
-				if(inAirJumps < JUMPS_ALLOWED_IN_AIR || this.isOnGround())
+				if(flying || inAirJumps < JUMPS_ALLOWED_IN_AIR || this.isOnGround())
 				{
 					if(!this.isOnGround())
 					{

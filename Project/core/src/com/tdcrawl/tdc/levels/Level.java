@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
+import com.google.gson.Gson;
 import com.tdcrawl.tdc.events.CustomEvents;
 import com.tdcrawl.tdc.events.Event;
 import com.tdcrawl.tdc.events.EventCallback;
@@ -29,6 +30,8 @@ import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.entities.living.Player;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
 import com.tdcrawl.tdc.util.Helper;
+import com.tdcrawl.tdc.util.Reference;
+import com.tdcrawl.tdc.util.Vector2I;
 
 /**
  * Stores all the rooms of a given level and handles their generation
@@ -36,11 +39,14 @@ import com.tdcrawl.tdc.util.Helper;
 public class Level
 {
 	private List<Room> rooms = new ArrayList<>();
-	private List<RoomBuilder> roomTypes = new ArrayList<>();
-	
+	private List<RoomBuilder> roomTypes = new ArrayList<>();	
 	private RoomBuilder spawnRoom;
 	
 	private final int FLOOR_NUMBER;
+	
+	private final String name;
+	private final Vector2I roomAmountXY;
+	
 	/**
 	 * Where every object will be
 	 */
@@ -59,6 +65,12 @@ public class Level
 	{
 		FLOOR_NUMBER = floorNo;
 		
+		Gson gson = new Gson();
+		LevelTemplate t = gson.fromJson(new FileReader(getFloorFolder() + "level.json"), LevelTemplate.class);
+		
+		this.roomAmountXY = t.roomAmountXY;
+		this.name = t.name;
+		
 		world = new World(new Vector2(0, -9.8f), true);
 		
 		// Handles any collision events that happen in the world
@@ -67,9 +79,6 @@ public class Level
 				@Override
 				public void beginContact(Contact contact)
 				{
-					System.out.println(contact.getFixtureA().getBody().getUserData());
-					System.out.println(contact.getFixtureB().getBody().getUserData());
-					
 					if(contact.getFixtureA().getBody().getUserData() instanceof GameObject && 
 							contact.getFixtureB().getBody().getUserData() instanceof GameObject)
 					{
@@ -126,17 +135,42 @@ public class Level
 	 */
 	public void create()
 	{
-		// For now this just loads everything in the spawner room
-		rooms.add(spawnRoom.createRoom());
+		float yOffset = 0;
+		float xOffset = 0;
 		
-		spawnRoom.createRoom();
+		float maxOffsetY = 0;
 		
-		for(GameObject o : rooms.get(0).getObjectsInRoom())
+		for(int y = -roomAmountXY.y; y <= roomAmountXY.y; y++)
 		{
-			o.init(world);
+			for(int x = -roomAmountXY.x; x <= roomAmountXY.x; x++)
+			{
+				Room r;
+				
+				if(x == 0 && y == 0)
+				{
+					r = spawnRoom.createRoom(new Vector2(xOffset, yOffset));
+				}
+				else
+				{
+					r = roomTypes.get((int)(Math.random() * roomTypes.size())).createRoom(new Vector2(xOffset, yOffset));
+				}
+				
+				xOffset += r.getDimensions().x;
+				maxOffsetY = Math.max(r.getDimensions().y, maxOffsetY);
+				
+				for(GameObject o : r.getObjectsInRoom())
+				{
+					o.init(world);
+					
+					if(o instanceof Player)
+						player = (Player)o;
+				}
+				
+				rooms.add(r);
+			}
 			
-			if(o instanceof Player)
-				player = (Player)o;
+			xOffset = 0;
+			yOffset += maxOffsetY;
 		}
 	}
 	
@@ -150,8 +184,7 @@ public class Level
 		
 		File f = new File(getFloorFolder() + roomName(i));
 		
-		// Keep going until we run out of rooms
-		
+		// Keep going until we run out of room types
 		while (f.exists())
 		{
 			roomTypes.add(getRoomBuilder(f));
@@ -207,7 +240,7 @@ public class Level
 	
 	private String roomName(int i)
 	{
-		return "room-" + i + ".json";
+		return "room_" + i + ".json";
 	}
 	
 	private String getFloorFolder()
@@ -225,8 +258,6 @@ public class Level
 			room.tick(delta, camera);
 		
 		Helper.setWorldLocked(false);
-		
-		Helper.cleanup(); // Does anything that had to be done after ticking
 	}
 	
 	public void render(float delta, Camera cam, Box2DDebugRenderer debugRenderer)
@@ -235,7 +266,7 @@ public class Level
 			cam.position.lerp(new Vector3(player.getPosition(), 0), 0.1f);
 		cam.update();
 		
-		if(debugRenderer != null)
+		if(Reference.isDebug() && debugRenderer != null)
 			debugRenderer.render(world, cam.combined);
 	}
 	
@@ -248,4 +279,6 @@ public class Level
 	
 	public World getWorld() { return world; }
 	public Player getPlayer() { return player; }
+	
+	public String getName() { return name; }
 }

@@ -17,7 +17,10 @@ public class RoomBuilder
 {
 	private boolean enclosed;
 	private Vector2 dimensions;
-	private List<GameObject> objects = new ArrayList<>();
+	
+	// These are parallel
+	private List<ObjectTemplate> templates = new ArrayList<>();
+	private List<ObjectData> templatesData = new ArrayList<>();
 	
 	/**
 	 * Creates the RoomBuilder from json
@@ -35,7 +38,10 @@ public class RoomBuilder
 			ObjectTemplate template = ObjectRegistry.getObject(data.name);
 			
 			if(template != null)
-				objects.add(template.create(data));
+			{
+				templates.add(template);
+				templatesData.add(data);
+			}
 			else
 				throw new IllegalStateException("Bad object name \"" + data.name + "\".");
 		}
@@ -62,8 +68,14 @@ public class RoomBuilder
 	{
 		Room room = new Room(dimensions);
 		
-		for(GameObject o : objects)
+		for(int i = 0; i < templates.size(); i++)
 		{
+			System.out.println(i);
+			ObjectTemplate t = templates.get(i);
+			
+			GameObject o = t.create(templatesData.get(i));
+			System.out.println(o);
+			
 			o.getPosition().add(offset);
 			
 			room.addObject(o);
@@ -98,4 +110,6 @@ public class RoomBuilder
 		}
 		return room;
 	}
+
+	public Vector2 getDimensions() { return dimensions; }
 }

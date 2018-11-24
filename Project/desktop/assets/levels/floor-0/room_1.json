@@ -1,0 +1,23 @@
+{
+	"dimensions":
+	{
+		"x": 40,
+		"y": 20
+	},
+	"objects":
+	[
+		{
+			"name": "ball",
+			"position":
+			{
+				"x": 2,
+				"y": 2
+			},
+			"radius": "0.8f",
+			"extraData":
+			{
+				"restitution": "1.0f"
+			}
+		}
+	]
+}
