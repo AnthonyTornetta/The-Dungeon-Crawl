@@ -22,6 +22,8 @@ import com.tdcrawl.tdc.util.Helper;
 import com.tdcrawl.tdc.util.Reference;
 import com.tdcrawl.tdc.items.Item;
 import com.tdcrawl.tdc.items.inventory.PlayerInventory;
+import com.tdcrawl.tdc.items.items.TestItem;
+import com.tdcrawl.tdc.items.items.weapons.melee.Sword;
 
 public class Player extends LivingEntity
 {
@@ -63,7 +65,7 @@ public class Player extends LivingEntity
 		
 		this.addFixture(head);
 		
-		inventory = new PlayerInventory();
+		inventory = new PlayerInventory(new Sword(), null, null);
 	}
 	
 	@Override
@@ -181,17 +183,17 @@ public class Player extends LivingEntity
 			}
 		}
 		
-		if(Gdx.input.isKeyPressed(Input.Keys.NUM_1) && !heldItem.equals(inventory.getItems()[0]))
+		if(Gdx.input.isKeyPressed(Input.Keys.NUM_1))
 		{
 			switchItem(0, false);
 		}
 		
-		if(Gdx.input.isKeyPressed(Input.Keys.NUM_2) && !heldItem.equals(inventory.getItems()[1]))
+		if(Gdx.input.isKeyPressed(Input.Keys.NUM_2))
 		{
 			switchItem(1, false);
 		}
 		
-		if(Gdx.input.isKeyPressed(Input.Keys.NUM_3) && !heldItem.equals(inventory.getItems()[2]))
+		if(Gdx.input.isKeyPressed(Input.Keys.NUM_3))
 		{
 			switchItem(2, false);
 		}
@@ -202,6 +204,8 @@ public class Player extends LivingEntity
 	private void switchItem(int itemSlot, boolean initial)
 	{
 		heldItem = inventory.getItems()[itemSlot];
+		float yoffset = 0.0f;
+		float xoffset = 0.0f;
 		
 		if(!initial)
 		{	
@@ -211,14 +215,18 @@ public class Player extends LivingEntity
 		PolygonShape item = new PolygonShape();
 		if(heldItem == null)
 		{
-			item.setAsBox(0.2f, 0.2f);
+			item.setAsBox(0.1f, 0.1f);
+			xoffset = 0.05f;
+			yoffset = 0.05f;
 		}
 		else
 		{
 			item.setAsBox(heldItem.getDimensions().x, heldItem.getDimensions().y);
+			xoffset = heldItem.getDimensions().x / 2;
+			yoffset = heldItem.getDimensions().y / 2;
 		}
 		
-		itemSensor = new Sensor(item, new Vector2(1.2f, 0.8f))
+		itemSensor = new Sensor(item, new Vector2(0.5f + xoffset, 0.25f + yoffset))
 		{
 			@Override
 			public void onCollide(GameObject other, ObjectFixture fixture)
