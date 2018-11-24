@@ -58,6 +58,13 @@ public abstract class LivingEntity extends Entity
 		this.health = maxHealth;
 	}
 	
+	/**
+	 * Called whenever a LivingEntity should die
+	 * If this returns false, the living entity will not die
+	 * @return false if it should not die, true if it should
+	 */
+	public abstract boolean die();
+	
 	// Getters & Setters //
 	
 	public abstract EntityType getEntityType();
@@ -65,7 +72,6 @@ public abstract class LivingEntity extends Entity
 	public void takeDamage(int amt) { health -= amt; }
 	public void heal(int amt) { health += amt; }
 	
-	public abstract boolean die();
 	public abstract boolean invulnerable();
 	
 	public int getMaxHealth() { return maxHealth; }

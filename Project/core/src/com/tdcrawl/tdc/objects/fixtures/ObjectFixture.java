@@ -67,6 +67,7 @@ public class ObjectFixture
 		fixture.setUserData(this);
 		
 		shape.dispose(); // We no longer need this
+		shape = null; // Prevents assertions failing later on when someone tries to reference the shape after it was disposed
 	}
 	
 	public void remove()

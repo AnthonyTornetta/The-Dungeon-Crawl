@@ -1,64 +1,30 @@
 {
+	"dimensions":
+	{
+		"x": 20,
+		"y": 20
+	},
 	"objects":
 	[
 		{
 			"name": "platform",
 			"position":
 			{
-				"x": 0.0,
-				"y": -5.0
+				"x": 0,
+				"y": -20f
 			},
 			"dimensions":
 			{
-				"x": 40.0,
-				"y": 1.0
-			}
-		},
-		{
-			"name": "platform",
-			"position":
-			{
-				"x": -20.0,
-				"y": 15.0
-			},
-			"dimensions":
-			{
-				"x": 1.0,
-				"y": 40.0
-			}
-		},
-		{
-			"name": "platform",
-			"position":
-			{
-				"x": 20.0,
-				"y": 15.0
-			},
-			"dimensions":
-			{
-				"x": 1.0,
-				"y": 40.0
-			}
-		},
-		{
-			"name": "platform",
-			"position":
-			{
-				"x": 0.0,
-				"y": 40.0
-			},
-			"dimensions":
-			{
-				"x": 40.0,
-				"y": 1.0
+				"y": 0.6f,
+				"x": 20f
 			}
 		},
 		{
 			"name": "player",
 			"position":
 			{
-				"x": 1,
-				"y": 2
+				"x": 0,
+				"y": 0
 			}
 		},
 		{

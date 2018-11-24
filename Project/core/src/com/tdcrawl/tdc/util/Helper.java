@@ -230,15 +230,21 @@ public final class Helper
 	{
 		if(!isWorldLocked())
 		{
+			while(fixturesToRemove.size() != 0)
+			{
+				ObjectFixture f = fixturesToRemove.remove(fixturesToRemove.size() - 1);
+				if(fixturesToAdd.containsKey(f))
+					fixturesToAdd.remove(f);
+				else
+					removeFixture(f);
+			}
+			
 			for(ObjectFixture f : fixturesToAdd.keySet())
 			{
 				addFixture(f, fixturesToAdd.get(f));
 			}
 			
 			fixturesToAdd.clear();
-			
-			while(fixturesToRemove.size() != 0)
-				removeFixture(fixturesToRemove.remove(fixturesToRemove.size() - 1));
 			
 			while(jointsToAdd.size() != 0)
 				addJoint(jointsToAdd.remove(jointsToAdd.size() - 1));
@@ -292,6 +298,6 @@ public final class Helper
 			return "Body [position=" + b.getPosition() + ", mass=" + b.getMass() + ", velocity=" + b.getLinearVelocity() + ", type=" + b.getType() + ", localCenter=" + b.getLocalCenter() + "]";
 		}
 		
-		return object.toString();
+		return object != null ? object.toString() : "null";
 	}
 }

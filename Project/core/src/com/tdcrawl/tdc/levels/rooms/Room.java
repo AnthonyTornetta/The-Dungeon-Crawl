@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector2;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.entities.Entity;
 
@@ -14,6 +15,13 @@ public class Room
 {
 	private List<GameObject> objectsInRoom = new ArrayList<>();
 	private List<Entity> entitiesInRoom = new ArrayList<>();
+	
+	private Vector2 dimensions;
+	
+	public Room(Vector2 dimensions)
+	{
+		this.dimensions = dimensions;
+	}
 	
 	public void tick(float delta, Camera cam)
 	{
@@ -32,4 +40,6 @@ public class Room
 		if(obj instanceof Entity)
 			entitiesInRoom.add((Entity)obj);
 	}
+	
+	public Vector2 getDimensions() { return dimensions; }
 }

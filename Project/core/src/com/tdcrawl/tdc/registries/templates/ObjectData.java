@@ -16,4 +16,41 @@ public class ObjectData
 	public Vector2 dimensions;
 	public float radius;
 	public Map<String, Object> extraData;
+	
+	public float getOrDef(String key, float def)
+	{
+		if(extraData == null)
+			return def;
+		try
+		{
+			return Float.parseFloat((String) extraData.getOrDefault(key, def + ""));
+		}
+		catch(NumberFormatException ex)
+		{
+			return def;
+		}
+	}
+
+	public Vector2 getOrDef(String key, Vector2 def)
+	{
+		if(extraData == null)
+			return def;
+		try
+		{
+			if(extraData.containsKey(key))
+			{
+				// It looks like this: (x,y) - aka (0.0,0.0)
+				
+				String[] split =("" + extraData.get(key)).split(",");
+				return new Vector2(Float.parseFloat(split[0].substring(1) + "f"),
+									Float.parseFloat(split[1].substring(0, split[1].length() - 1) + "f"));
+			}
+			else
+				return def;
+		}
+		catch(Exception ex)
+		{
+			return def;
+		}
+	}
 }
