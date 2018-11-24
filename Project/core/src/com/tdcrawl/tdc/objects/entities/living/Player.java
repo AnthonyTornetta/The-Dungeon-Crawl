@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tdcrawl.tdc.items.Item;
 import com.tdcrawl.tdc.items.inventory.PlayerInventory;
+import com.tdcrawl.tdc.items.items.weapons.melee.MeleeWeapon;
 import com.tdcrawl.tdc.items.items.weapons.melee.Sword;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.bodyparts.Arm;
@@ -43,7 +44,6 @@ public class Player extends LivingEntity
 	private static final float width = 0.2f;
 	
 	private Arm arm;
-	private Sensor itemSensor;
 	
 	private static final Vector2 ARM_OFFSET = new Vector2(0f, height - 0.2f);
 	
@@ -51,6 +51,12 @@ public class Player extends LivingEntity
 	
 	private PlayerInventory inventory;
 	private Item heldItem;
+	private Sensor itemSensor;
+	
+	private float timeSinceLeftClick = 0.0f;
+	private boolean returnSwing = false;
+	private static final float SWING_STRENGTH = 0.05f;
+	private static final float TIME_BETWEEN_SWINGS = 1.2f;
 	
 	private ShapeRenderer sr = new ShapeRenderer();
 	
@@ -77,7 +83,7 @@ public class Player extends LivingEntity
 		PolygonShape armShape = new PolygonShape();
 		armShape.setAsBox(0.3f, 0.08f, new Vector2(0.25f, 0), 0.0f);
 		
-		arm = new Arm(armShape, getPosition(), BodyType.DynamicBody, getDensity(), 0, 0, 0, false, true, false);
+		arm = new Arm(armShape, getPosition(), BodyType.DynamicBody, getDensity(), 0, 0, 0, false, false, false);
 		
 		arm.init(world);
 		arm.attatch(this, ARM_OFFSET);
@@ -124,6 +130,24 @@ public class Player extends LivingEntity
 	public void tick(float delta, Camera cam)
 	{
 		timeSinceLastJump += delta;
+		timeSinceLeftClick += delta;
+		
+		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && timeSinceLeftClick >= TIME_BETWEEN_SWINGS)
+		{
+			System.out.println("Swing");
+			returnSwing = true;
+			timeSinceLeftClick = 0.0f;
+			System.out.println(SWING_STRENGTH);
+			arm.getBody().applyTorque(SWING_STRENGTH, true);
+		}
+		
+		if(returnSwing && timeSinceLeftClick > TIME_BETWEEN_SWINGS / 2)
+		{
+			System.out.println("Return Swing");
+			returnSwing = false;
+			System.out.println(-SWING_STRENGTH);
+			arm.getBody().applyTorque(-SWING_STRENGTH, true);
+		}
 		
 		int mX = Gdx.input.getX();
 		int mY = Gdx.input.getY();
@@ -133,7 +157,7 @@ public class Player extends LivingEntity
 		
 		if(mX >= 0 && mX < Gdx.graphics.getWidth() && mY >= 0 && mY < Gdx.graphics.getHeight())
 		{
-			if(Gdx.input.getDeltaX() != 0 || Gdx.input.getDeltaY() != 0)
+			if(timeSinceLeftClick > TIME_BETWEEN_SWINGS)
 			{
 				arm.setAngle(Helper.angleTo(getPosition().cpy().add(ARM_OFFSET).add(ARM_OFFSET), mouseCoordsInMeters, ARM_OFFSET));
 			}
@@ -160,8 +184,12 @@ public class Player extends LivingEntity
 				setPosition(startPos);
 				getBody().setLinearVelocity(0, 0);
 			}
+			
 			if(Gdx.input.isKeyJustPressed(Input.Keys.F))
+			{
 				flying = !flying;
+			}
+			
 			if(Gdx.input.isKeyJustPressed(Input.Keys.C)) // WARNING: Once this is turned on then off again, sensors and anything else that was set to no collide WILL become collidable.
 				// And I really dont feel the need to create a list of noncollidable fixtures and check them when undoing the noclip.
 			{
@@ -170,7 +198,9 @@ public class Player extends LivingEntity
 				for(Fixture f : getBody().getFixtureList())
 				{
 				    if(!(UserDataParser.getObjectFixture(f) instanceof Sensor))
+				    {
 				        f.setSensor(noclip);
+				    }
 				}
 			}
 		}
@@ -216,7 +246,7 @@ public class Player extends LivingEntity
 		{
 			switchItem(2, false);
 		}
-		
+			
 		getBody().setLinearVelocity(getBody().getLinearVelocity().add(acceleration));
 	}
 	
@@ -245,19 +275,31 @@ public class Player extends LivingEntity
 			yoffset = heldItem.getDimensions().y / 2;
 		}
 		
-		itemSensor = new Sensor(item, new Vector2(0.5f + xoffset, 0.25f + yoffset))
+		itemSensor = new Sensor(item, new Vector2(0.5f + xoffset, 0.2f + yoffset))
 		{
 			
 			@Override
 			public void onCollide(GameObject other, ObjectFixture fixture)
 			{
-				System.out.println("OUCH");
+				if(other instanceof LivingEntity)
+				{
+					System.out.println("Hit");
+					if(heldItem instanceof MeleeWeapon)
+					{
+						((LivingEntity) other).takeDamage(((MeleeWeapon) heldItem).getDamage());
+					}
+					else
+					{
+						((LivingEntity) other).takeDamage(1);
+					}
+				}
+
 			}
 			
 			@Override
 			public void onUncollide(GameObject other, ObjectFixture fixture)
 			{
-				System.out.println("Thanks");
+				//Nothing to do here
 			}
 		};
 		
