@@ -67,6 +67,9 @@ public class Level
 				@Override
 				public void beginContact(Contact contact)
 				{
+					System.out.println(contact.getFixtureA().getBody().getUserData());
+					System.out.println(contact.getFixtureB().getBody().getUserData());
+					
 					if(contact.getFixtureA().getBody().getUserData() instanceof GameObject && 
 							contact.getFixtureB().getBody().getUserData() instanceof GameObject)
 					{
