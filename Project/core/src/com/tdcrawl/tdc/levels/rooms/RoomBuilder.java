@@ -32,10 +32,15 @@ public class RoomBuilder
 		
 		RoomBlueprint blueprint = gson.fromJson(json, RoomBlueprint.class);
 		
+		templates.clear();
+		templatesData.clear();
+		
 		// Adds all the objects created fromt he object data to add to the room when we create the room
 		for(ObjectData data : blueprint.objects)
 		{
 			ObjectTemplate template = ObjectRegistry.getObject(data.name);
+			
+			System.out.println(template + "; " + data);
 			
 			if(template != null)
 			{
@@ -68,13 +73,14 @@ public class RoomBuilder
 	{
 		Room room = new Room(dimensions);
 		
+		System.out.println(templates.size());
+		
 		for(int i = 0; i < templates.size(); i++)
 		{
-			System.out.println(i);
 			ObjectTemplate t = templates.get(i);
 			
-			GameObject o = t.create(templatesData.get(i));
-			System.out.println(o);
+			System.out.println(templatesData.get(i).position);
+			GameObject o = t.create(templatesData.get(i).clone());
 			
 			o.getPosition().add(offset);
 			

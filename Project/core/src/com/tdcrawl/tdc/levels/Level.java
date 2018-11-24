@@ -140,9 +140,9 @@ public class Level
 		
 		float maxOffsetY = 0;
 		
-		for(int y = -roomAmountXY.y; y <= roomAmountXY.y; y++)
+		for(int y = -roomAmountXY.y; y < roomAmountXY.y; y++)
 		{
-			for(int x = -roomAmountXY.x; x <= roomAmountXY.x; x++)
+			for(int x = -roomAmountXY.x; x < roomAmountXY.x; x++)
 			{
 				Room r;
 				

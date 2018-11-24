@@ -60,8 +60,6 @@ public class Player extends LivingEntity
 	{
 		super(position, BodyType.DynamicBody, 0, true, true, true, createCenterFixture(), maxHealth);
 		
-		startPos = Helper.clone(position);
-		
 		CircleShape headShape = new CircleShape();
 		headShape.setRadius(headRadius);
 		ObjectFixture head = new ObjectFixture(true, 1.5f, 0.1f, 0.05f, headShape, new Vector2(0, height + headRadius));
@@ -104,6 +102,8 @@ public class Player extends LivingEntity
 		
 		footSensor.init(getBody());
 
+		startPos = Helper.clone(getPosition());
+		
 		switchItem(0, true);
 	}
 	

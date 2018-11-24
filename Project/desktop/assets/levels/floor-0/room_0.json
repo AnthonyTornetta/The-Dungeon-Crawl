@@ -10,13 +10,39 @@
 			"name": "ball",
 			"position":
 			{
-				"x": 2,
-				"y": 2
+				"x": 10,
+				"y": 10
 			},
 			"radius": "0.8f",
 			"extraData":
 			{
-				"restitution": "1.0f"
+				"restitution": "0.7f"
+			}
+		},
+		{
+			"name": "ball",
+			"position":
+			{
+				"x": 10,
+				"y": 10
+			},
+			"radius": "0.8f",
+			"extraData":
+			{
+				"restitution": "0.7f"
+			}
+		},
+		{
+			"name": "ball",
+			"position":
+			{
+				"x": 10,
+				"y": 10
+			},
+			"radius": "0.8f",
+			"extraData":
+			{
+				"restitution": "0.7f"
 			}
 		}
 	]

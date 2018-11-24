@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
  * Everything is public in this because this is basically just a struct (see https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/struct)
  * so there is no point to making getters and setters for it
  */
-public class ObjectData
+public class ObjectData implements Cloneable
 {
 	public String name;
 	public Vector2 position;
@@ -52,5 +52,16 @@ public class ObjectData
 		{
 			return def;
 		}
+	}
+	
+	public ObjectData clone()
+	{
+		ObjectData d = new ObjectData();
+		d.name = name;
+		d.position = position != null ? position.cpy() : null;
+		d.dimensions = dimensions != null ? dimensions.cpy() : null;
+		d.radius = radius;
+		d.extraData = extraData;
+		return d;
 	}
 }

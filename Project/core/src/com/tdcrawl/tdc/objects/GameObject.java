@@ -373,7 +373,7 @@ public abstract class GameObject
 	@Override
 	public String toString()
 	{
-		return "GameObject [body=" + body + ", world=" + world + ", centralPoint=" + centralPoint + ", density="
+		return "GameObject [body=" + Helper.toString(body) + ", world=" + Helper.toString(world) + ", centralPoint=" + centralPoint + ", density="
 				+ density + ", centerFixture=" + centerFixture + ", type=" + type + ", position=" + position
 				+ ", angle=" + angle + ", bullet=" + bullet + ", fixedRotation=" + fixedRotation + ", collidable="
 				+ collidable + ", fixturesToAdd=" + fixturesToAdd + "]";
