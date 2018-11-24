@@ -247,6 +247,7 @@ public class Player extends LivingEntity
 		
 		itemSensor = new Sensor(item, new Vector2(0.5f + xoffset, 0.25f + yoffset))
 		{
+			
 			@Override
 			public void onCollide(GameObject other, ObjectFixture fixture)
 			{
@@ -260,7 +261,8 @@ public class Player extends LivingEntity
 			}
 		};
 		
-		Helper.addFixture(itemSensor, this);
+		
+		Helper.addFixture(itemSensor, arm);
 	}
 
 	@Override
