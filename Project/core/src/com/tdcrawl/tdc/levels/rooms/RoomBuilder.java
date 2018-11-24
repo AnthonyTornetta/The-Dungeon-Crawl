@@ -3,15 +3,20 @@ package com.tdcrawl.tdc.levels.rooms;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.google.gson.Gson;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.entities.Entity;
+import com.tdcrawl.tdc.objects.staticobjects.Platform;
 import com.tdcrawl.tdc.registries.ObjectRegistry;
 import com.tdcrawl.tdc.registries.templates.ObjectData;
 import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
 
 public class RoomBuilder
 {
+	private boolean enclosed;
+	private Vector2 dimensions;
 	private List<GameObject> objects = new ArrayList<>();
 	
 	/**
@@ -34,6 +39,9 @@ public class RoomBuilder
 			else
 				throw new IllegalStateException("Bad object name \"" + data.name + "\".");
 		}
+		
+		enclosed = blueprint.enclosed;
+		dimensions = blueprint.dimensions;
 	}
 	
 	/**
@@ -42,15 +50,58 @@ public class RoomBuilder
 	 */
 	public Room createRoom()
 	{
-		Room room = new Room();
+		return createRoom(Vector2.Zero);
+	}
+	
+	/**
+	 * Creates a room and fills it up with the objects
+	 * @param offset The offset of every object in the room
+	 * @return The room with all the objects in it
+	 */
+	public Room createRoom(Vector2 offset)
+	{
+		Room room = new Room(dimensions);
 		
 		for(GameObject o : objects)
 		{
+			o.getPosition().add(offset);
+			
 			room.addObject(o);
 			if(o instanceof Entity)
 				((Entity)o).setRoom(room);
 		}
 		
+		if(enclosed)
+		{
+			System.out.println("aye");
+			
+			Vector2 dimensions = room.getDimensions();
+			
+			System.out.println(dimensions);
+			
+			PolygonShape wall1Shape = new PolygonShape();
+			wall1Shape.setAsBox(dimensions.x, 0.2f);
+			Platform wall1 = new Platform(wall1Shape, dimensions.cpy().add(0, dimensions.y), 0.6f, 0.0f);
+			
+			PolygonShape wall2Shape = new PolygonShape();
+			wall2Shape.setAsBox(dimensions.x, 0.2f);
+			Platform wall2 = new Platform(wall2Shape, dimensions.cpy().sub(0, dimensions.y), 0.6f, dimensions.y);
+			
+			PolygonShape wall3Shape = new PolygonShape();
+			wall3Shape.setAsBox(0.2f, dimensions.y);
+			Platform wall3 = new Platform(wall3Shape, dimensions.cpy().add(dimensions.x, 0), 0.6f, 0.0f);
+			
+			PolygonShape wall4Shape = new PolygonShape();
+			wall4Shape.setAsBox(0.2f, dimensions.y);
+			Platform wall4 = new Platform(wall4Shape, dimensions.cpy().sub(dimensions.x, 0), 0.6f, 0.0f);
+			
+			room.addObject(wall1);
+			room.addObject(wall2);
+			room.addObject(wall3);
+			room.addObject(wall4);
+			
+			System.out.println(room.getObjectsInRoom());
+		}
 		return room;
 	}
 }

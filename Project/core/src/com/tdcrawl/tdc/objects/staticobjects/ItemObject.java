@@ -105,17 +105,14 @@ public class ItemObject extends GameObject
 				
 				ItemObject obj = asObject(template.create(itemData));
 				if(data.position != null)
-				{
 					obj.setPosition(data.position);
-				}
-				if(data.extraData.containsKey("velocity"))
-					obj.setVelocity((Vector2) data.extraData.get("velocity"));
+				obj.setVelocity(data.getOrDef("velocity", Vector2.Zero));
 				
 				return obj;
 			}
 			
 			return null;
-		}		
+		}
 	}
 	
 	// Getters & Setters //

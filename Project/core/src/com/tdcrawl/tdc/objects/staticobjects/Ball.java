@@ -16,8 +16,7 @@ import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
 
 public class Ball extends GameObject
 {
-	public Ball(Vector2 position, float angle, boolean bullet, boolean fixedRotation, boolean collidable,
-			ObjectFixture centerFixture)
+	public Ball(Vector2 position, float angle, boolean bullet, boolean fixedRotation, boolean collidable, ObjectFixture centerFixture)
 	{
 		super(position, BodyType.DynamicBody, angle, bullet, fixedRotation, collidable, centerFixture);
 		
@@ -44,15 +43,10 @@ public class Ball extends GameObject
 		@Override
 		public GameObject create(ObjectData data)
 		{
-			float restitution = 0.1f;
-			
-			if(data.extraData != null && data.extraData.containsKey("restitution"))
-				restitution = Float.parseFloat((String)data.extraData.get("restitution"));
-			
 			CircleShape shape = new CircleShape();
 			shape.setRadius(data.radius);
 			
-			ObjectFixture fixture = new ObjectFixture(true, 1, restitution, 0.1f, shape, new Vector2(0, 0));
+			ObjectFixture fixture = new ObjectFixture(true, 1, data.getOrDef("restitution", 0.1f), 0.1f, shape, new Vector2(0, 0));
 			
 			return new Ball(data.position, 0, false, false, true, fixture);
 		}

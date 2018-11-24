@@ -10,14 +10,11 @@ import java.util.List;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tdcrawl.tdc.events.CustomEvents;
 import com.tdcrawl.tdc.events.Event;
@@ -30,7 +27,6 @@ import com.tdcrawl.tdc.levels.rooms.Room;
 import com.tdcrawl.tdc.levels.rooms.RoomBuilder;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.entities.living.Player;
-import com.tdcrawl.tdc.objects.entities.living.types.categories.enemies.Slime;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
 import com.tdcrawl.tdc.util.Helper;
 
@@ -85,7 +81,7 @@ public class Level
 						EventsHandler.call(new CollisionEvent(obj1, obj2, fix1, fix2, CollisionState.BEGIN_COLLISION));
 					}
 				}
-				 
+				
 				@Override
 				public void endContact(Contact contact)
 				{
@@ -111,7 +107,7 @@ public class Level
 				{
 					
 				}
-
+				
 				@Override
 				public void postSolve(Contact contact, ContactImpulse impulse)
 				{
@@ -124,12 +120,13 @@ public class Level
 	
 	/**
 	 * Assembles a randomly generated level based off the room variations loaded before
-	 * TODO: do that ^
 	 */
 	public void create()
 	{
 		// For now this just loads everything in the spawner room
 		rooms.add(spawnRoom.createRoom());
+		
+		spawnRoom.createRoom();
 		
 		for(GameObject o : rooms.get(0).getObjectsInRoom())
 		{
@@ -138,13 +135,6 @@ public class Level
 			if(o instanceof Player)
 				player = (Player)o;
 		}
-		
-		Shape shape = new CircleShape();
-		shape.setRadius(1.0f);
-		Slime slime = new Slime(shape, new Vector2(0, 30f), BodyType.DynamicBody, 0.7f, 0.1f, 0, false, true, true, 90);
-		slime.init(getWorld());
-		
-		rooms.get(0).addObject(slime);
 	}
 	
 	/**

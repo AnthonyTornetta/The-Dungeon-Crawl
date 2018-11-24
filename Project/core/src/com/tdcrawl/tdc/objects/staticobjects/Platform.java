@@ -36,7 +36,7 @@ public class Platform extends GameObject
 			PolygonShape shape = new PolygonShape();
 			shape.setAsBox(data.dimensions.x, data.dimensions.y);
 			
-			return new Platform(shape, data.position, 1f, 0);
+			return new Platform(shape, data.position, data.getOrDef("friction", 0.6f), data.getOrDef("angle", 0));
 		}
 	}
 }

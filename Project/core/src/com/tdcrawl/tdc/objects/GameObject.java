@@ -178,6 +178,11 @@ public abstract class GameObject
 	
 	// Getters & Setters //
 	
+	protected void setShape(Shape shape)
+	{
+		centerFixture.setShape(shape);
+	}
+	
 	public boolean initialized()
 	{
 		return body != null;
