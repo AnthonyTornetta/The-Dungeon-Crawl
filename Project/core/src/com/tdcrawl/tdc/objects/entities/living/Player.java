@@ -53,10 +53,9 @@ public class Player extends LivingEntity
 	private Item heldItem;
 	private Sensor itemSensor;
 	
-	private float timeSinceLeftClick = 0.0f;
-	private boolean returnSwing = false;
-	private static final float SWING_STRENGTH = 0.05f;
-	private static final float TIME_BETWEEN_SWINGS = 1.2f;
+	private float timeSinceSwing = 0.0f;
+	private static final float SWING_STRENGTH = 0.25f;
+	private static final float TIME_BETWEEN_SWINGS = 0.3f;
 	
 	private ShapeRenderer sr = new ShapeRenderer();
 	
@@ -83,7 +82,7 @@ public class Player extends LivingEntity
 		PolygonShape armShape = new PolygonShape();
 		armShape.setAsBox(0.3f, 0.08f, new Vector2(0.25f, 0), 0.0f);
 		
-		arm = new Arm(armShape, getPosition(), BodyType.DynamicBody, getDensity(), 0, 0, 0, false, false, false);
+		arm = new Arm(armShape, getPosition(), BodyType.DynamicBody, getDensity(), 0, 0, 0, false, true, false);
 		
 		arm.init(world);
 		arm.attatch(this, ARM_OFFSET);
@@ -130,23 +129,20 @@ public class Player extends LivingEntity
 	public void tick(float delta, Camera cam)
 	{
 		timeSinceLastJump += delta;
-		timeSinceLeftClick += delta;
+		timeSinceSwing += delta;
 		
-		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && timeSinceLeftClick >= TIME_BETWEEN_SWINGS)
+		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && timeSinceSwing > TIME_BETWEEN_SWINGS)
 		{
-			System.out.println("Swing");
-			returnSwing = true;
-			timeSinceLeftClick = 0.0f;
-			System.out.println(SWING_STRENGTH);
-			arm.getBody().applyTorque(SWING_STRENGTH, true);
+			timeSinceSwing = 0.0f;
 		}
 		
-		if(returnSwing && timeSinceLeftClick > TIME_BETWEEN_SWINGS / 2)
+		if(timeSinceSwing < TIME_BETWEEN_SWINGS / 5)
 		{
-			System.out.println("Return Swing");
-			returnSwing = false;
-			System.out.println(-SWING_STRENGTH);
-			arm.getBody().applyTorque(-SWING_STRENGTH, true);
+			arm.setAngle(arm.getAngle() + SWING_STRENGTH);
+		}
+		else if(timeSinceSwing <= TIME_BETWEEN_SWINGS * 9 / 10)
+		{
+			arm.setAngle(arm.getAngle() - SWING_STRENGTH);
 		}
 		
 		int mX = Gdx.input.getX();
@@ -157,7 +153,7 @@ public class Player extends LivingEntity
 		
 		if(mX >= 0 && mX < Gdx.graphics.getWidth() && mY >= 0 && mY < Gdx.graphics.getHeight())
 		{
-			if(timeSinceLeftClick > TIME_BETWEEN_SWINGS)
+			if(timeSinceSwing > TIME_BETWEEN_SWINGS * 9 / 10)
 			{
 				arm.setAngle(Helper.angleTo(getPosition().cpy().add(ARM_OFFSET).add(ARM_OFFSET), mouseCoordsInMeters, ARM_OFFSET));
 			}
