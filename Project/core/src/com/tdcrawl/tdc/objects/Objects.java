@@ -1,6 +1,7 @@
 package com.tdcrawl.tdc.objects;
 
 import com.tdcrawl.tdc.objects.entities.living.Player;
+import com.tdcrawl.tdc.objects.entities.living.types.categories.enemies.Slime;
 import com.tdcrawl.tdc.objects.staticobjects.Ball;
 import com.tdcrawl.tdc.objects.staticobjects.ItemObject;
 import com.tdcrawl.tdc.objects.staticobjects.Platform;
@@ -22,5 +23,6 @@ public class Objects
 		ObjectRegistry.registerObject("player", new Player.PlayerTemplate());
 		ObjectRegistry.registerObject("ball", new Ball.BallTemplate());
 		ObjectRegistry.registerObject("item", new ItemObject.ItemObjectTemplate());
+		ObjectRegistry.registerObject("slime", new Slime.SlimeTemplate());
 	}
 }
