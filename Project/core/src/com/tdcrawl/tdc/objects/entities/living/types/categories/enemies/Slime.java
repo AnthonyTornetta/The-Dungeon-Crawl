@@ -5,7 +5,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Shape;
+import com.tdcrawl.tdc.levels.Level;
+import com.tdcrawl.tdc.levels.rooms.Room;
 import com.tdcrawl.tdc.objects.GameObject;
+import com.tdcrawl.tdc.objects.entities.Entity;
+import com.tdcrawl.tdc.objects.entities.living.Player;
 import com.tdcrawl.tdc.objects.entities.living.types.categories.HostileEntity;
 import com.tdcrawl.tdc.registries.templates.ObjectData;
 import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
@@ -35,21 +39,39 @@ public class Slime extends HostileEntity
 	
 	public void jump()
 	{
-		float[] dataChunk = super.getPath(null);
-		Vector2 hopDir = new Vector2();
+		//FIX THIS TRASH
+		Player currentPlayer = null;
 		
-		hopDir.x = getBody().getMass() * 6.0f;
-		//might work on more advanced hops; higher pathing in later tests
-		if(dataChunk[3] > 90 && dataChunk[3] < 270)
+		for(Entity o : getRoom().getEntitiesInRoom())
 		{
-			hopDir.y = 120;
+			if(o instanceof Player)
+			{
+				 currentPlayer = (Player)o;
+			}
+		}
+		
+		if(currentPlayer.equals(null))
+		{
+			getBody().applyForceToCenter(getBody().getMass() * 6.0f, 90, true);
 		}
 		else
 		{
-			hopDir.y = 60;
+			float[] dataChunk = super.getPath(currentPlayer);
+			Vector2 hopDir = new Vector2();
+			
+			hopDir.x = getBody().getMass() * 6.0f;
+			//might work on more advanced hops; higher pathing in later tests
+			if(dataChunk[2] > 90 && dataChunk[2] < 270)
+			{
+				hopDir.y = 120;
+			}
+			else
+			{
+				hopDir.y = 60;
+			}
+			
+			getBody().applyForceToCenter(hopDir, true);
 		}
-		
-		getBody().applyForceToCenter(hopDir, true);
 	}
 	
 	public static class SlimeTemplate implements ObjectTemplate
