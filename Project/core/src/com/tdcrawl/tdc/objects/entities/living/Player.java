@@ -108,7 +108,7 @@ public class Player extends LivingEntity
 
 		startPos = Helper.clone(getPosition());
 		
-		switchItem(0, true);
+		switchItem(inventory.getItems()[0], true);
 	}
 	
 	/**
@@ -229,25 +229,30 @@ public class Player extends LivingEntity
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.NUM_1))
 		{
-			switchItem(0, false);
+			switchItem(inventory.getItems()[0], false);
 		}
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.NUM_2))
 		{
-			switchItem(1, false);
+			switchItem(inventory.getItems()[1], false);
 		}
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.NUM_3))
 		{
-			switchItem(2, false);
+			switchItem(inventory.getItems()[2], false);
+		}
+		
+		if(arm.getAngle() > Math.PI / 2 && arm.getAngle() < Math.PI * 2 / 3)
+		{
+			switchItem(heldItem, false);
 		}
 			
 		getBody().setLinearVelocity(getBody().getLinearVelocity().add(acceleration));
 	}
 	
-	private void switchItem(int itemSlot, boolean initial)
+	private void switchItem(Item newItem, boolean initial)
 	{
-		heldItem = inventory.getItems()[itemSlot];
+		heldItem = newItem;
 		float yoffset = 0.0f;
 		float xoffset = 0.0f;
 		
@@ -267,7 +272,12 @@ public class Player extends LivingEntity
 		{
 			item.setAsBox(heldItem.getDimensions().x, heldItem.getDimensions().y);
 			xoffset = heldItem.getDimensions().x / 2;
-			yoffset = -heldItem.getDimensions().x * 3;//heldItem.getDimensions().y / 2;
+			yoffset = -heldItem.getDimensions().y / 2;
+			
+			if(arm.getAngle() > Math.PI / 2 && arm.getAngle() < Math.PI * 2 / 3)
+			{
+				yoffset = Byte.decode((Byte.decode(yoffset + "").toString().charAt(0) == '1' ? "0" : "1") + Byte.decode(yoffset + "").toString().substring(1, Byte.decode(yoffset + "").toString().length())).floatValue();
+			}
 		}
 		
 		itemSensor = new Sensor(item, new Vector2(0.5f + xoffset, 0.2f + yoffset))
