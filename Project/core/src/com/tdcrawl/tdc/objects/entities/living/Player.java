@@ -80,8 +80,7 @@ public class Player extends LivingEntity
 		super.init(world);
 		
 		PolygonShape armShape = new PolygonShape();
-		armShape.setAsBox(0.3f, 0.08f, new Vector2(0.25f, 0), 0.0f);
-		
+		armShape.setAsBox(0.3f, 0.08f, new Vector2(0.25f, 0), 0.0f); // MAKE THE 0.25f NEGATIVE WHEN LEFT
 		arm = new Arm(armShape, getPosition(), BodyType.DynamicBody, getDensity(), 0, 0, 0, false, true, false);
 		
 		arm.init(world);
@@ -260,15 +259,15 @@ public class Player extends LivingEntity
 		PolygonShape item = new PolygonShape();
 		if(heldItem == null)
 		{
-			item.setAsBox(0.1f, 0.1f);
+			item.setAsBox(0.1f, -0.1f);
 			xoffset = 0.05f;
-			yoffset = 0.05f;
+			yoffset = -0.05f;
 		}
 		else
 		{
 			item.setAsBox(heldItem.getDimensions().x, heldItem.getDimensions().y);
 			xoffset = heldItem.getDimensions().x / 2;
-			yoffset = heldItem.getDimensions().y / 2;
+			yoffset = -heldItem.getDimensions().x * 3;//heldItem.getDimensions().y / 2;
 		}
 		
 		itemSensor = new Sensor(item, new Vector2(0.5f + xoffset, 0.2f + yoffset))

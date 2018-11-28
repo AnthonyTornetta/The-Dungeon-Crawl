@@ -300,4 +300,20 @@ public final class Helper
 		
 		return object != null ? object.toString() : "null";
 	}
+
+	public static void flipX(PolygonShape armShape)
+	{
+		int len = armShape.getVertexCount();
+		Vector2[] vertexes = new Vector2[len];
+		
+		for(int i = 0; i < len; i++)
+		{
+			Vector2 vertex = new Vector2();
+			armShape.getVertex(i, vertex);
+			vertex.x = -vertex.x;
+			vertexes[i] = vertex;
+		}
+		
+		armShape.set(vertexes);
+	}
 }
