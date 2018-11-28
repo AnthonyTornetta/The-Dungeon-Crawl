@@ -276,7 +276,7 @@ public class Player extends LivingEntity
 			
 			if(arm.getAngle() > Math.PI / 2 && arm.getAngle() < Math.PI * 2 / 3)
 			{
-				yoffset = Byte.decode((Byte.decode(yoffset + "").toString().charAt(0) == '1' ? "0" : "1") + Byte.decode(yoffset + "").toString().substring(1, Byte.decode(yoffset + "").toString().length())).floatValue();
+				yoffset = -yoffset;
 			}
 		}
 		
@@ -288,7 +288,7 @@ public class Player extends LivingEntity
 			{
 				if(other instanceof LivingEntity)
 				{
-					System.out.println("Hit");
+					System.out.println("Hit"); // btw dan make sure they're swinging too
 					if(heldItem instanceof MeleeWeapon)
 					{
 						((LivingEntity) other).takeDamage(((MeleeWeapon) heldItem).getDamage());

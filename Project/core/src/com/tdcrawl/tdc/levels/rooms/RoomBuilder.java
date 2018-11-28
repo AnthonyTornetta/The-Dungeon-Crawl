@@ -93,7 +93,7 @@ public class RoomBuilder
 			
 			PolygonShape shp = new PolygonShape();
 			shp.setAsBox(dimensions.x, 0.25f);
-			Platform p = new Platform(shp, new Vector2(0, (float) (Math.random() * 4 + dimensions.y)), 1.0f, 0.0f);
+			Platform p = new Platform(shp, new Vector2(0, dimensions.y), 1.0f, 0.0f);
 			
 			room.addObject(p);
 		}
