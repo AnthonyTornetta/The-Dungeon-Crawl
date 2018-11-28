@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.google.gson.Gson;
+import com.tdcrawl.tdc.levels.Level;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.entities.Entity;
 import com.tdcrawl.tdc.objects.staticobjects.Platform;
@@ -16,7 +17,6 @@ import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
 public class RoomBuilder
 {
 	private boolean enclosed;
-	private Vector2 dimensions;
 	
 	// These are parallel
 	private List<ObjectTemplate> templates = new ArrayList<>();
@@ -40,8 +40,6 @@ public class RoomBuilder
 		{
 			ObjectTemplate template = ObjectRegistry.getObject(data.name);
 			
-			System.out.println(template + "; " + data);
-			
 			if(template != null)
 			{
 				templates.add(template);
@@ -52,34 +50,32 @@ public class RoomBuilder
 		}
 		
 		enclosed = blueprint.enclosed;
-		dimensions = blueprint.dimensions;
 	}
 	
 	/**
 	 * Creates a room and fills it up with the objects
+	 * @param level the Level the room is a part of
 	 * @return The room with all the objects in it
 	 */
-	public Room createRoom()
+	public Room createRoom(Level level)
 	{
-		return createRoom(Vector2.Zero);
+		return createRoom(level, Vector2.Zero);
 	}
 	
 	/**
 	 * Creates a room and fills it up with the objects
 	 * @param offset The offset of every object in the room
+	 * @param level The level the room is a part of
 	 * @return The room with all the objects in it
 	 */
-	public Room createRoom(Vector2 offset)
+	public Room createRoom(Level level, Vector2 offset)
 	{
-		Room room = new Room(dimensions);
-		
-		System.out.println(templates.size());
+		Room room = new Room(level);
 		
 		for(int i = 0; i < templates.size(); i++)
 		{
 			ObjectTemplate t = templates.get(i);
 			
-			System.out.println(templatesData.get(i).position);
 			GameObject o = t.create(templatesData.get(i).clone());
 			
 			o.getPosition().add(offset);
@@ -91,31 +87,16 @@ public class RoomBuilder
 		
 		if(enclosed)
 		{
-			Vector2 dimensions = room.getDimensions();
+			Vector2 dimensions = room.getDimensions().cpy().add(offset);
 			
-			PolygonShape wall1Shape = new PolygonShape();
-			wall1Shape.setAsBox(dimensions.x, 0.2f);
-			Platform wall1 = new Platform(wall1Shape, offset.cpy().add(0, dimensions.y), 0.6f, 0.0f);
+			final float gap = 12f;
 			
-			PolygonShape wall2Shape = new PolygonShape();
-			wall2Shape.setAsBox(dimensions.x, 0.2f);
-			Platform wall2 = new Platform(wall2Shape, offset.cpy().sub(0, dimensions.y), 0.6f, dimensions.y);
+			PolygonShape shp = new PolygonShape();
+			shp.setAsBox(dimensions.x, 0.25f);
+			Platform p = new Platform(shp, new Vector2(0, (float) (Math.random() * 4 + dimensions.y)), 1.0f, 0.0f);
 			
-			PolygonShape wall3Shape = new PolygonShape();
-			wall3Shape.setAsBox(0.2f, dimensions.y);
-			Platform wall3 = new Platform(wall3Shape, offset.cpy().add(dimensions.x, 0), 0.6f, 0.0f);
-			
-			PolygonShape wall4Shape = new PolygonShape();
-			wall4Shape.setAsBox(0.2f, dimensions.y);
-			Platform wall4 = new Platform(wall4Shape, offset.cpy().sub(dimensions.x, 0), 0.6f, 0.0f);
-			
-			room.addObject(wall1);
-			room.addObject(wall2);
-			room.addObject(wall3);
-			room.addObject(wall4);
+			room.addObject(p);
 		}
 		return room;
 	}
-
-	public Vector2 getDimensions() { return dimensions; }
 }

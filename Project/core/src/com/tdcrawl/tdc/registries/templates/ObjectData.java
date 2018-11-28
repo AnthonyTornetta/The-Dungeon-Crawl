@@ -23,7 +23,7 @@ public class ObjectData implements Cloneable
 			return def;
 		try
 		{
-			return Float.parseFloat((String) extraData.getOrDefault(key, def + ""));
+			return Float.parseFloat((String)extraData.getOrDefault(key, def + ""));
 		}
 		catch(NumberFormatException ex)
 		{
@@ -47,6 +47,20 @@ public class ObjectData implements Cloneable
 			}
 			else
 				return def;
+		}
+		catch(Exception ex)
+		{
+			return def;
+		}
+	}
+	
+	public boolean getOrDef(String key, boolean def)
+	{
+		if(extraData == null)
+			return def;
+		try
+		{
+			return Boolean.parseBoolean("" + extraData.get(key));
 		}
 		catch(Exception ex)
 		{

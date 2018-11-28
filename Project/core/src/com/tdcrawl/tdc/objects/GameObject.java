@@ -98,6 +98,7 @@ public abstract class GameObject
 		this.position = position;
 		this.type = type;
 		this.bullet = bullet;
+		this.angle = angle;
 		this.fixedRotation = fixedRotation;
 		this.collidable = collidable;
 		this.centerFixture = centerFixture;

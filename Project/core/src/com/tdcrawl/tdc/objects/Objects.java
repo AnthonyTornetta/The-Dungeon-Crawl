@@ -1,5 +1,6 @@
 package com.tdcrawl.tdc.objects;
 
+import com.tdcrawl.tdc.objects.entities.Door;
 import com.tdcrawl.tdc.objects.entities.living.Player;
 import com.tdcrawl.tdc.objects.entities.living.types.categories.enemies.Slime;
 import com.tdcrawl.tdc.objects.staticobjects.Ball;
@@ -24,5 +25,6 @@ public class Objects
 		ObjectRegistry.registerObject("ball", new Ball.BallTemplate());
 		ObjectRegistry.registerObject("item", new ItemObject.ItemObjectTemplate());
 		ObjectRegistry.registerObject("slime", new Slime.SlimeTemplate());
+		ObjectRegistry.registerObject("door", new Door.DoorTemplate());
 	}
 }

@@ -11,24 +11,18 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.google.gson.Gson;
 import com.tdcrawl.tdc.events.CustomEvents;
 import com.tdcrawl.tdc.events.Event;
 import com.tdcrawl.tdc.events.EventCallback;
 import com.tdcrawl.tdc.events.EventsHandler;
-import com.tdcrawl.tdc.events.types.CollisionEvent;
-import com.tdcrawl.tdc.events.types.CollisionEvent.CollisionState;
 import com.tdcrawl.tdc.events.types.WorldLockChangeEvent;
 import com.tdcrawl.tdc.levels.rooms.Room;
 import com.tdcrawl.tdc.levels.rooms.RoomBuilder;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.entities.living.Player;
-import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
+import com.tdcrawl.tdc.physics.DefaultCollisionHandler;
 import com.tdcrawl.tdc.util.Helper;
 import com.tdcrawl.tdc.util.Reference;
 import com.tdcrawl.tdc.util.Vector2I;
@@ -46,6 +40,7 @@ public class Level
 	
 	private final String name;
 	private final Vector2I roomAmountXY;
+	private final Vector2 roomDimensions;
 	
 	/**
 	 * Where every object will be
@@ -65,67 +60,19 @@ public class Level
 	{
 		FLOOR_NUMBER = floorNo;
 		
+		Reference.debugLog("Loading floor #" + floorNo + ".", this);
+		
 		Gson gson = new Gson();
 		LevelTemplate t = gson.fromJson(new FileReader(getFloorFolder() + "level.json"), LevelTemplate.class);
 		
 		this.roomAmountXY = t.roomAmountXY;
 		this.name = t.name;
+		this.roomDimensions = t.roomDimensions;
 		
 		world = new World(new Vector2(0, -9.8f), true);
 		
 		// Handles any collision events that happen in the world
-		world.setContactListener(new ContactListener()
-			{
-				@Override
-				public void beginContact(Contact contact)
-				{
-					if(contact.getFixtureA().getBody().getUserData() instanceof GameObject && 
-							contact.getFixtureB().getBody().getUserData() instanceof GameObject)
-					{
-						// Checks if it's 2 game objects colliding, and if it is call a new event
-						
-						GameObject obj1 = (GameObject) contact.getFixtureA().getBody().getUserData();
-						GameObject obj2 = (GameObject) contact.getFixtureB().getBody().getUserData();
-						
-						ObjectFixture fix1 = (ObjectFixture) contact.getFixtureA().getUserData();
-						ObjectFixture fix2 = (ObjectFixture) contact.getFixtureB().getUserData();
-						
-						EventsHandler.call(new CollisionEvent(obj1, obj2, fix1, fix2, CollisionState.BEGIN_COLLISION));
-					}
-				}
-				
-				@Override
-				public void endContact(Contact contact)
-				{
-					if(contact.getFixtureA().getBody().getUserData() instanceof GameObject && 
-							contact.getFixtureB().getBody().getUserData() instanceof GameObject)
-					{
-						// Checks if it's 2 game objects colliding, and if it is call a new event
-						
-						GameObject obj1 = (GameObject) contact.getFixtureA().getBody().getUserData();
-						GameObject obj2 = (GameObject) contact.getFixtureB().getBody().getUserData();
-						
-						ObjectFixture fix1 = (ObjectFixture) contact.getFixtureA().getUserData();
-						ObjectFixture fix2 = (ObjectFixture) contact.getFixtureB().getUserData();
-						
-						EventsHandler.call(new CollisionEvent(obj1, obj2, fix1, fix2, CollisionState.END_COLLISION));
-					}
-				}
-				
-				// The below methods are just weird and are called in between the two methods above.
-				
-				@Override
-				public void preSolve(Contact contact, Manifold oldManifold)
-				{
-					
-				}
-				
-				@Override
-				public void postSolve(Contact contact, ContactImpulse impulse)
-				{
-					
-				}
-			});
+		world.setContactListener(new DefaultCollisionHandler());
 		
 		init();
 	}
@@ -147,13 +94,9 @@ public class Level
 				Room r;
 				
 				if(x == 0 && y == 0)
-				{
-					r = spawnRoom.createRoom(new Vector2(xOffset, yOffset));
-				}
+					r = spawnRoom.createRoom(this, new Vector2(xOffset, yOffset));
 				else
-				{
-					r = roomTypes.get((int)(Math.random() * roomTypes.size())).createRoom(new Vector2(xOffset, yOffset));
-				}
+					r = roomTypes.get((int)(Math.random() * roomTypes.size())).createRoom(this, new Vector2(xOffset, yOffset));
 				
 				xOffset += r.getDimensions().x;
 				maxOffsetY = Math.max(r.getDimensions().y, maxOffsetY);
@@ -281,4 +224,6 @@ public class Level
 	public Player getPlayer() { return player; }
 	
 	public String getName() { return name; }
+
+	public Vector2 getRoomDimensions() { return roomDimensions; }
 }

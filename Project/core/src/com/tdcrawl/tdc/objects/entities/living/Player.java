@@ -30,7 +30,7 @@ import com.tdcrawl.tdc.util.UserDataParser;
 public class Player extends LivingEntity
 {
 	private final float ACCELERATION = 10.0f; // x m/s^2
-	private final float JUMP_STRENGTH = 6.5f; // acceleration applied when jump occurs
+	private final float JUMP_STRENGTH = 10.5f; // acceleration applied when jump occurs
 	private final int JUMPS_ALLOWED_IN_AIR = 1;
 	private final float TIME_BETWEEN_JUMPS = 0.4f;
 	
@@ -120,7 +120,7 @@ public class Player extends LivingEntity
 		PolygonShape shape = new PolygonShape();
 		shape.setAsBox(width, height);
 		
-		ObjectFixture centerFixture = new ObjectFixture(true, 6.0f, 0.0f, 0.05f, shape, new Vector2(0, 0));
+		ObjectFixture centerFixture = new ObjectFixture(true, 6.0f, 0.0f, 0.2f, shape, new Vector2(0, 0));
 		return centerFixture;
 	}
 	

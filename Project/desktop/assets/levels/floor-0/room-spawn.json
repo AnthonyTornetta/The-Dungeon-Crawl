@@ -15,14 +15,6 @@
 			}
 		},
 		{
-			"name": "slime",
-			"position":
-			{
-				"x": 10,
-				"y": 10
-			}
-		},
-		{
 			"name": "ball",
 			"position":
 			{
@@ -84,6 +76,23 @@
 			"extraData":
 			{
 				"itemId": "testItem"
+			}
+		},
+		{
+			"name": "door",
+			"position":
+			{
+				"x": 2,
+				"y": 1
+			},
+			"dimensions":
+			{
+				"x": .025f,
+				"y": 1
+			},
+			"extraData":
+			{
+				"angle": 2f
 			}
 		}
 	]
