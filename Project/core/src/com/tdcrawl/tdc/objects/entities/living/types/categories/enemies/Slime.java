@@ -46,27 +46,32 @@ public class Slime extends HostileEntity
 			if(o instanceof Player)
 			{
 				 currentPlayer = (Player)o;
+				 System.out.println("Player Found!");
 			}
 		}
 		
 		if(currentPlayer.equals(null))
 		{
-			getBody().applyForceToCenter(getBody().getMass() * 6.0f, 90, true);
+			System.out.println("Triggered Idle Jump");
+			getBody().applyForceToCenter(getBody().getMass() * 90.0f, 90, true);
 		}
 		else
 		{
+			System.out.println("Triggered Directional Jump");
 			float[] dataChunk = super.getPath(currentPlayer);
 			Vector2 hopDir = new Vector2();
 			
-			hopDir.x = getBody().getMass() * 6.0f;
+			hopDir.y = getBody().getMass() + 1000.0f;
 			//might work on more advanced hops; higher pathing in later tests
 			if(dataChunk[2] > 90 && dataChunk[2] < 270)
 			{
-				hopDir.y = 120;
+				System.out.println("Jumped 300");
+				hopDir.x = 300;
 			}
 			else
 			{
-				hopDir.y = 60;
+				System.out.println("Jumped 60");
+				hopDir.x = 60;
 			}
 			
 			getBody().applyForceToCenter(hopDir, true);

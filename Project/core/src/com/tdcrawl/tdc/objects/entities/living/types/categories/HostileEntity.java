@@ -40,24 +40,27 @@ public abstract class HostileEntity extends LivingEntity implements IPathable
 		
 		dataPack[0] = (float) playerCoord.x - curretCoord.x;
 		dataPack[1] = (float) playerCoord.y - curretCoord.y;
-		dataPack[2] = (float) Math.atan(Math.abs(dataPack[0]/dataPack[1]));
+		dataPack[2] = (float) Math.atan(Math.abs(dataPack[1]/dataPack[0]));
+		dataPack[2] *= 180/Math.PI;
 		
 		if(dataPack[0] >= 0)
 		{
 			if(dataPack[1] <= 0)
-				dataPack[2] += 270;
+				dataPack[2] = 360 - dataPack[2];
 		}
 		if(dataPack[0] <= 0)
 		{
 			if(dataPack[1] <= 0)
-				dataPack[2] += 180;
+				dataPack[2] = 270 - dataPack[2];
 			else
-				dataPack[2] += 90;
+				dataPack[2] = 180 - dataPack[2];
 		}
 		
 		
+		/*
 		for(int ye = 0; ye < dataPack.length; ye++)
 			System.out.println("Data: " + dataPack[ye]);
+		*/
 		
 		return dataPack;
 	}
