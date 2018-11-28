@@ -23,7 +23,7 @@ public abstract class HealingItem extends Item
 	 */
 	public void use(LivingEntity by, LivingEntity on, UseType type)
 	{
-		if(type.equals(UseType.LEFT_CLICK))
+		if(type.equals(UseType.RIGHT_CLICK))
 		{
 			by.heal(healingValue);
 		}

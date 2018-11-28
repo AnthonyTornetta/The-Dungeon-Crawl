@@ -20,6 +20,9 @@ public abstract class RangedWeapon extends Weapon
 	 */
 	public void use(LivingEntity by, LivingEntity on, UseType type)
 	{
-		
+		if(type == UseType.RIGHT_CLICK)
+		{
+			
+		}
 	}
 }
