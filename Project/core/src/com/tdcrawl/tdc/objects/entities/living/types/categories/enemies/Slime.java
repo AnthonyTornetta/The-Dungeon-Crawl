@@ -5,8 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Shape;
-import com.tdcrawl.tdc.levels.Level;
-import com.tdcrawl.tdc.levels.rooms.Room;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.entities.Entity;
 import com.tdcrawl.tdc.objects.entities.living.Player;
@@ -18,6 +16,7 @@ import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
 public class Slime extends HostileEntity
 {
 	float lastJump = 0;
+	float counter = 0;
 	
 	public Slime(Shape shape, Vector2 position, float friction,
 			float angle, boolean bullet, boolean fixedRotation, boolean collidable, int maxHealth)
@@ -97,14 +96,17 @@ public class Slime extends HostileEntity
 	@Override
 	public void tick(float delta, Camera cam) 
 	{
+		
 		//used to counteract gravity, makes it 'bouncier'
 		getBody().applyForceToCenter(new Vector2(0, getBody().getMass() * 6.0f), true);
-		if(getLastJump()+3 >= delta)
+		
+		if(getLastJump()+3 <= counter)
 		{
 			jump();
-			setLastJump(delta);
+			setLastJump(counter);
 		}
 		
+		counter += delta;
 	}
 	public float getLastJump() {return this.lastJump;}
 	public void setLastJump(float currentTime) {this.lastJump = currentTime;}
