@@ -1,5 +1,7 @@
 package com.tdcrawl.tdc.objects.entities.living;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
@@ -12,8 +14,10 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.tdcrawl.tdc.items.Item;
 import com.tdcrawl.tdc.items.inventory.PlayerInventory;
+import com.tdcrawl.tdc.items.items.weapons.Weapon;
 import com.tdcrawl.tdc.items.items.weapons.melee.MeleeWeapon;
 import com.tdcrawl.tdc.items.items.weapons.melee.Sword;
 import com.tdcrawl.tdc.objects.GameObject;
@@ -44,6 +48,7 @@ public class Player extends LivingEntity
 	private static final float width = 0.2f;
 	
 	private Arm arm;
+	private boolean facingLeft = false;
 	
 	private static final Vector2 ARM_OFFSET = new Vector2(0f, height - 0.2f);
 	
@@ -56,6 +61,7 @@ public class Player extends LivingEntity
 	private float timeSinceSwing = 0.0f;
 	private static final float SWING_STRENGTH = 0.25f;
 	private static final float TIME_BETWEEN_SWINGS = 0.3f;
+	private ArrayList<LivingEntity> alreadyHit = new ArrayList<LivingEntity>();
 	
 	private ShapeRenderer sr = new ShapeRenderer();
 	
@@ -108,7 +114,7 @@ public class Player extends LivingEntity
 
 		startPos = Helper.clone(getPosition());
 		
-		switchItem(inventory.getItems()[0], true);
+		switchItem(inventory.getItems()[0], true, false);
 	}
 	
 	/**
@@ -135,13 +141,27 @@ public class Player extends LivingEntity
 			timeSinceSwing = 0.0f;
 		}
 		
-		if(timeSinceSwing < TIME_BETWEEN_SWINGS / 5)
+		if(facingLeft)
 		{
-			arm.setAngle(arm.getAngle() + SWING_STRENGTH);
+			if(timeSinceSwing < TIME_BETWEEN_SWINGS / 5)
+			{
+				arm.setAngle(arm.getAngle() - SWING_STRENGTH);
+			}
+			else if(timeSinceSwing <= TIME_BETWEEN_SWINGS * 9 / 10)
+			{
+				arm.setAngle(arm.getAngle() + SWING_STRENGTH);
+			}
 		}
-		else if(timeSinceSwing <= TIME_BETWEEN_SWINGS * 9 / 10)
+		else
 		{
-			arm.setAngle(arm.getAngle() - SWING_STRENGTH);
+			if(timeSinceSwing < TIME_BETWEEN_SWINGS / 5)
+			{
+				arm.setAngle(arm.getAngle() + SWING_STRENGTH);
+			}
+			else if(timeSinceSwing <= TIME_BETWEEN_SWINGS * 9 / 10)
+			{
+				arm.setAngle(arm.getAngle() - SWING_STRENGTH);
+			}
 		}
 		
 		int mX = Gdx.input.getX();
@@ -229,28 +249,33 @@ public class Player extends LivingEntity
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.NUM_1))
 		{
-			switchItem(inventory.getItems()[0], false);
+			switchItem(inventory.getItems()[0], false, facingLeft);
 		}
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.NUM_2))
 		{
-			switchItem(inventory.getItems()[1], false);
+			switchItem(inventory.getItems()[1], false, facingLeft);
 		}
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.NUM_3))
 		{
-			switchItem(inventory.getItems()[2], false);
+			switchItem(inventory.getItems()[2], false, facingLeft);
 		}
 		
-		if(arm.getAngle() > Math.PI / 2 && arm.getAngle() < Math.PI * 2 / 3)
+		if(Math.abs(arm.getAngle()) > Math.PI / 2 && Math.abs(arm.getAngle()) < Math.PI * 3 / 2 && !facingLeft && timeSinceSwing > TIME_BETWEEN_SWINGS * 9 / 10)
 		{
-			switchItem(heldItem, false);
+			switchItem(heldItem, false, true);
+		}
+		
+		if((Math.abs(arm.getAngle()) < Math.PI / 2 || Math.abs(arm.getAngle()) > Math.PI * 3 / 2) && facingLeft && timeSinceSwing > TIME_BETWEEN_SWINGS * 9 / 10)
+		{
+			switchItem(heldItem, false, false);
 		}
 			
 		getBody().setLinearVelocity(getBody().getLinearVelocity().add(acceleration));
 	}
 	
-	private void switchItem(Item newItem, boolean initial)
+	private void switchItem(Item newItem, boolean initial, boolean left)
 	{
 		heldItem = newItem;
 		float yoffset = 0.0f;
@@ -272,11 +297,13 @@ public class Player extends LivingEntity
 		{
 			item.setAsBox(heldItem.getDimensions().x, heldItem.getDimensions().y);
 			xoffset = heldItem.getDimensions().x / 2;
-			yoffset = -heldItem.getDimensions().y / 2;
+			yoffset = heldItem.getDimensions().y / 2;
+			facingLeft = false;
 			
-			if(arm.getAngle() > Math.PI / 2 && arm.getAngle() < Math.PI * 2 / 3)
+			if(left)
 			{
-				yoffset = -yoffset;
+				yoffset = -2 * yoffset;
+				facingLeft = true;
 			}
 		}
 		
@@ -286,17 +313,21 @@ public class Player extends LivingEntity
 			@Override
 			public void onCollide(GameObject other, ObjectFixture fixture)
 			{
-				if(other instanceof LivingEntity)
+				if(other instanceof LivingEntity && timeSinceSwing < TIME_BETWEEN_SWINGS * 9 / 10 && !alreadyHit.contains(other))
 				{
-					System.out.println("Hit"); // btw dan make sure they're swinging too
+					System.out.print("Hit for ");
 					if(heldItem instanceof MeleeWeapon)
 					{
 						((LivingEntity) other).takeDamage(((MeleeWeapon) heldItem).getDamage());
+						System.out.print(((Weapon) heldItem).getDamage());
 					}
 					else
 					{
 						((LivingEntity) other).takeDamage(1);
+						System.out.print("1");
 					}
+					System.out.println(" damage.");
+					alreadyHit.add((LivingEntity) other);
 				}
 
 			}
@@ -304,7 +335,7 @@ public class Player extends LivingEntity
 			@Override
 			public void onUncollide(GameObject other, ObjectFixture fixture)
 			{
-				//Nothing to do here
+				alreadyHit.clear();
 			}
 		};
 		
