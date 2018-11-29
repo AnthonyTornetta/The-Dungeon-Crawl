@@ -1,6 +1,5 @@
 package com.tdcrawl.tdc.items.items.weapons.ranged;
 
-import com.tdcrawl.tdc.items.Item.UseType;
 import com.tdcrawl.tdc.items.items.weapons.Weapon;
 import com.tdcrawl.tdc.objects.entities.living.LivingEntity;
 

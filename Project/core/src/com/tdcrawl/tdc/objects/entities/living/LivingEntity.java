@@ -69,7 +69,7 @@ public abstract class LivingEntity extends Entity
 	
 	public abstract EntityType getEntityType();
 	
-	public void takeDamage(int amt) { health -= amt; }
+	public void takeDamage(int amt) { health -= amt; if(health <= 0) die(); }
 	public void heal(int amt) { health += amt; }
 	
 	public abstract boolean invulnerable();

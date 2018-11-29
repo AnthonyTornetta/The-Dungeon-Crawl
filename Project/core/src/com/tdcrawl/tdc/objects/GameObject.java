@@ -334,20 +334,27 @@ public abstract class GameObject
 		if (Float.floatToIntBits(angle) != Float.floatToIntBits(other.angle))
 			return false;
 		if (body == null) 
+		{
 			if (other.body != null)
 				return false;
+		}
 		else if (!body.equals(other.body))
 			return false;
 		if (bullet != other.bullet)
 			return false;
 		if (centerFixture == null) 
+		{
 			if (other.centerFixture != null)
 				return false;
+		}
 		else if (!centerFixture.equals(other.centerFixture))
 			return false;
-		if (centralPoint == null) 
+		
+		if (centralPoint == null)
+		{
 			if (other.centralPoint != null)
 				return false;
+		}
 		else if (!centralPoint.equals(other.centralPoint))
 			return false;
 		if (collidable != other.collidable)
@@ -357,13 +364,17 @@ public abstract class GameObject
 		if (fixedRotation != other.fixedRotation)
 			return false;
 		if (fixturesToAdd == null) 
+		{
 			if (other.fixturesToAdd != null)
 				return false;
+		}
 		else if (!fixturesToAdd.equals(other.fixturesToAdd))
 			return false;
 		if (position == null) 
+		{
 			if (other.position != null)
 				return false;
+		}
 		else if (!position.equals(other.position))
 			return false;
 		if (type != other.type)

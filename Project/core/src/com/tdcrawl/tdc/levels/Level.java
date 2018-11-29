@@ -20,7 +20,6 @@ import com.tdcrawl.tdc.events.EventsHandler;
 import com.tdcrawl.tdc.events.types.WorldLockChangeEvent;
 import com.tdcrawl.tdc.levels.rooms.Room;
 import com.tdcrawl.tdc.levels.rooms.RoomBuilder;
-import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.entities.living.Player;
 import com.tdcrawl.tdc.physics.DefaultCollisionHandler;
 import com.tdcrawl.tdc.util.Helper;
@@ -32,7 +31,7 @@ import com.tdcrawl.tdc.util.Vector2I;
  */
 public class Level
 {
-	private List<Room> rooms = new ArrayList<>();
+	private Room[][] rooms;
 	private List<RoomBuilder> roomTypes = new ArrayList<>();	
 	private RoomBuilder spawnRoom;
 	
@@ -87,29 +86,32 @@ public class Level
 		
 		float maxOffsetY = 0;
 		
-		for(int y = -roomAmountXY.y; y < roomAmountXY.y; y++)
+		rooms = new Room[roomAmountXY.y * 2][roomAmountXY.x * 2];
+		
+		for(int y = 0; y < 2 * roomAmountXY.y; y++)
 		{
-			for(int x = -roomAmountXY.x; x < roomAmountXY.x; x++)
+			for(int x = 0; x < 2 * roomAmountXY.x; x++)
 			{
 				Room r;
 				
-				if(x == 0 && y == 0)
-					r = spawnRoom.createRoom(this, new Vector2(xOffset, yOffset));
+				boolean leftBorder = x == 0,
+						rightBorder = x == roomAmountXY.x * 2 - 1, 
+						topBorder = y == 0,
+						bottomBorder = y == roomAmountXY.y * 2 - 1;
+				
+				System.out.println(y + ", " + x+ " , " + (roomAmountXY.y * 2 - 1));
+				
+				if(x == roomAmountXY.x && y == roomAmountXY.y)
+					r = spawnRoom.createRoom(this, new Vector2(xOffset, yOffset), leftBorder, rightBorder, topBorder, bottomBorder);
 				else
-					r = roomTypes.get((int)(Math.random() * roomTypes.size())).createRoom(this, new Vector2(xOffset, yOffset));
+					r = roomTypes.get((int)(Math.random() * roomTypes.size())).createRoom(this, new Vector2(xOffset, yOffset), leftBorder, rightBorder, topBorder, bottomBorder);
 				
 				xOffset += r.getDimensions().x;
 				maxOffsetY = Math.max(r.getDimensions().y, maxOffsetY);
 				
-				for(GameObject o : r.getObjectsInRoom())
-				{
-					o.init(world);
-					
-					if(o instanceof Player)
-						player = (Player)o;
-				}
+				r.init();
 				
-				rooms.add(r);
+				rooms[y][x] = r;
 			}
 			
 			xOffset = 0;
@@ -197,9 +199,30 @@ public class Level
 		world.step(delta, 8, 3); // 8 and 3 are good* values I found online. *I assume they are good.
 		// URL: http://www.iforce2d.net/b2dtut/worlds
 		
-		for(Room room : rooms)
-			room.tick(delta, camera);
-		
+		for(int y = 0; y < rooms.length; y++)
+		{
+			for(int x = 0; x < rooms[y].length; x++)
+			{
+				Room room = rooms[y][x];
+				
+				if(getPlayer() != null)
+				{
+					if(getPlayer().getPosition().x > x * getRoomDimensions().x && getPlayer().getPosition().x < (x + 1) * getRoomDimensions().x
+							&& getPlayer().getPosition().y > y * getRoomDimensions().y && getPlayer().getPosition().y < (y + 1) * getRoomDimensions().y)
+					{
+						if(!getPlayer().getRoom().equals(room))
+						{
+							System.out.println("YEAH");
+							getPlayer().getRoom().removeObject(getPlayer());
+							getPlayer().setRoom(room);
+							room.addObject(getPlayer());
+						}
+					}
+				}
+				
+				room.tick(delta, camera);
+			}
+		}
 		Helper.setWorldLocked(false);
 	}
 	
@@ -221,9 +244,11 @@ public class Level
 	// Getters & Setters //
 	
 	public World getWorld() { return world; }
-	public Player getPlayer() { return player; }
 	
 	public String getName() { return name; }
 
-	public Vector2 getRoomDimensions() { return roomDimensions; }
+	public Vector2 getRoomDimensions() { return roomDimensions.cpy(); }
+
+	public void setPlayer(Player player) { this.player = player; }
+	public Player getPlayer() { return player; }
 }

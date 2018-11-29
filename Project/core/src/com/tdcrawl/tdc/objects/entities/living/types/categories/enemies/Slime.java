@@ -28,13 +28,13 @@ public class Slime extends HostileEntity
 	@Override
 	public boolean die()
 	{
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean invulnerable()
 	{
-		return true;
+		return false;
 	}
 	
 	

@@ -28,4 +28,10 @@ public abstract class HealingItem extends Item
 			by.heal(healingValue);
 		}
 	}
+	
+	public int getPassiveHeal()
+	{
+		return passiveHeal;
+	}
 }
+	
