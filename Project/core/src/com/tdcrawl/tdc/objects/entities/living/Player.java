@@ -14,7 +14,6 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.tdcrawl.tdc.items.Item;
 import com.tdcrawl.tdc.items.inventory.PlayerInventory;
 import com.tdcrawl.tdc.items.items.weapons.Weapon;
