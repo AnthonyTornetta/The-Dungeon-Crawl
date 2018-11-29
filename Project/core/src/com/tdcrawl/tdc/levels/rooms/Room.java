@@ -35,6 +35,14 @@ public class Room
 	
 	public void tick(float delta, Camera cam)
 	{
+		if(thingsToSpawn.size() != 0)
+		{
+			if(getPlayer() != null)
+			{
+				initiateRoom();
+			}
+		}
+		
 		List<LivingEntity> dead = new ArrayList<>();
 		
 		for(Entity e : entitiesInRoom)
@@ -95,8 +103,12 @@ public class Room
 		for(LivingEntity ent : thingsToSpawn)
 		{
 			addObject(ent, true);
-			ent.init(level.getWorld());
+			
+			if(ent.getBody() == null)
+				ent.init(level.getWorld());
 		}
+		
+		thingsToSpawn.clear();
 	}
 	
 	public void init()
@@ -183,10 +195,5 @@ public class Room
 	public void playerLeave() { this.player = null; }
 	public boolean isPlayerIn() { return player != null; }
 	public Player getPlayer() { return player; }
-	private void setPlayer(Player p)
-	{
-		this.player = p;
-		
-		initiateRoom();
-	}
+	private void setPlayer(Player p) { this.player = p; }
 }

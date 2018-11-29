@@ -95,9 +95,9 @@ public class Level
 				Room r;
 				
 				boolean leftBorder = x == 0,
-						rightBorder = x + 1 == roomAmountXY.x, 
+						rightBorder = x == roomAmountXY.x * 2 - 1, 
 						topBorder = y == 0,
-						bottomBorder = y + 1 == roomAmountXY.y;
+						bottomBorder = y == roomAmountXY.y * 2 - 1;
 				
 				if(x == roomAmountXY.x && y == roomAmountXY.y)
 					r = spawnRoom.createRoom(this, new Vector2(xOffset, yOffset), leftBorder, rightBorder, topBorder, bottomBorder);
