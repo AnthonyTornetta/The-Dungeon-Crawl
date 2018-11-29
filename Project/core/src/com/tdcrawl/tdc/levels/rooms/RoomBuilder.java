@@ -114,8 +114,9 @@ public class RoomBuilder
 			floorShape2.setAsBox(platformWidth, thickness);
 			Platform floorPlatform2 = new Platform(floorShape2, new Vector2(dimensions.x - platformWidth, 0).add(offset), 1.0f, 0.0f);
 			
-			Door floorDoor = new Door(new Vector2(dimensions.x / 2, 0).add(offset), new Vector2(thickness, doorWidth / 2), (float)Math.PI / 2.0f, doorWidth / 2);
+			Door floorDoor = new Door(new Vector2(dimensions.x / 2, dimensions.y).add(offset), new Vector2(thickness, doorWidth / 2), (float)Math.PI / 2.0f, doorWidth / 2);
 			floorDoor.setLocked(bottomBorder);
+			
 			
 			room.addObject(floorDoor);
 			room.addObject(floorPlatform1);
@@ -130,7 +131,7 @@ public class RoomBuilder
 			ceilingShape2.setAsBox(platformWidth, thickness);
 			Platform ceilingPlatform2 = new Platform(ceilingShape2, new Vector2(dimensions.x - platformWidth, dimensions.y).add(offset), 1.0f, 0.0f);
 			
-			Door ceilingDoor = new Door(new Vector2(dimensions.x / 2, dimensions.y).add(offset), new Vector2(thickness, doorWidth / 2), (float)Math.PI / 2.0f, doorWidth / 2);
+			Door ceilingDoor = new Door(new Vector2(dimensions.x / 2, 0).add(offset), new Vector2(thickness, doorWidth / 2), (float)Math.PI / 2.0f, doorWidth / 2);
 			ceilingDoor.setLocked(topBorder);
 			
 			room.addObject(ceilingDoor);
