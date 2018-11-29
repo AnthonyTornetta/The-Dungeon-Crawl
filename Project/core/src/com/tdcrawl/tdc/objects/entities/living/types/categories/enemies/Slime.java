@@ -27,13 +27,13 @@ public class Slime extends HostileEntity
 	@Override
 	public boolean die()
 	{
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean invulnerable()
 	{
-		return true;
+		return false;
 	}
 	
 	public void jump()
@@ -49,7 +49,7 @@ public class Slime extends HostileEntity
 			}
 		}
 		
-		if(currentPlayer.equals(null))
+		if(currentPlayer == null)
 		{
 			getBody().applyForceToCenter(getBody().getMass() * 6.0f, 90, true);
 		}

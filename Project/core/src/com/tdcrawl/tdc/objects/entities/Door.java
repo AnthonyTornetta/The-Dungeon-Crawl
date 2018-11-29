@@ -1,7 +1,5 @@
 package com.tdcrawl.tdc.objects.entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -21,18 +19,21 @@ import com.tdcrawl.tdc.util.Reference;
 public class Door extends Entity
 {
 	private boolean opened = true;
+	private boolean locked = false;
 	
 	private ObjectFixture top, bottom;
 	
 	private float amtOpen = 0;
+	private float openAmount;
 	
 	private Vector2 dimensions;
 	
-	public Door(Vector2 position, Vector2 dimensions, float angle)
+	public Door(Vector2 position, Vector2 dimensions, float angle, float openAmount)
 	{
 		super(position, BodyType.KinematicBody, angle, false, true, true, setupCenterFixture());
 		
 		this.dimensions = dimensions;
+		this.openAmount = openAmount;
 	}
 	
 	@Override
@@ -64,9 +65,6 @@ public class Door extends Entity
 			open();
 		else
 			close();
-		
-		if(Gdx.input.isKeyJustPressed(Input.Keys.P))
-			setOpen(!opened);
 	}
 	
 	private static ObjectFixture setupCenterFixture()
@@ -80,21 +78,25 @@ public class Door extends Entity
 	
 	private void close()
 	{
-		if(amtOpen > 0)
+		if(!locked && amtOpen > 0)
 		{
 			amtOpen -= 0.1f;
 			Helper.moveShape(top.getShape(), new Vector2(0, -0.1f));
 			Helper.moveShape(bottom.getShape(), new Vector2(0, 0.1f));
+			
+			getBody().setAwake(true);
 		}
 	}
 
 	private void open()
 	{
-		if(amtOpen < 1f)
+		if(!locked && amtOpen < openAmount)
 		{
 			amtOpen += 0.1f;
 			Helper.moveShape(top.getShape(), new Vector2(0, 0.1f));
 			Helper.moveShape(bottom.getShape(), new Vector2(0, -0.1f));
+			
+			getBody().setAwake(true);
 		}
 	}
 	
@@ -104,9 +106,12 @@ public class Door extends Entity
 		public GameObject create(ObjectData data)
 		{
 			Reference.debugLog("" + data.getOrDef("angle", 0), this);
-			Door d = new Door(data.position, data.dimensions, data.getOrDef("angle", 0));
+			Door d = new Door(data.position, data.dimensions, data.getOrDef("angle", 0), data.getOrDef("openAmount", 1f));
 			d.setOpen(data.getOrDef("opened", false));
 			return d;
 		}
 	}
+	
+	public boolean isLocked() { return locked; }
+	public void setLocked(boolean locked) { this.locked = locked; }
 }
