@@ -12,6 +12,7 @@ import com.tdcrawl.tdc.objects.entities.Entity;
 import com.tdcrawl.tdc.objects.entities.living.LivingEntity;
 import com.tdcrawl.tdc.objects.entities.living.Player;
 import com.tdcrawl.tdc.objects.entities.living.types.EntityType;
+import com.tdcrawl.tdc.util.Helper;
 
 /**
  * Just a thing that stores a bunch of GameObjects
@@ -33,8 +34,10 @@ public class Room
 		this.level = level;
 	}
 	
+	int ts = 0;
+	
 	public void tick(float delta, Camera cam)
-	{
+	{ts++;
 		if(thingsToSpawn.size() != 0)
 		{
 			if(getPlayer() != null)
@@ -59,7 +62,12 @@ public class Room
 		}
 		
 		while(dead.size() != 0)
-			entitiesInRoom.remove(dead.remove(dead.size() - 1));
+		{
+			System.out.println("AYE ADDED");
+			LivingEntity deadBoi = dead.remove(dead.size() - 1);
+			removeObject(deadBoi);
+			Helper.removeObject(deadBoi);
+		}
 		
 		if(isPlayerIn() && !isOpen)
 		{
@@ -176,7 +184,7 @@ public class Room
 					boolean shouldOpen = true;
 					for(Entity e : entitiesInRoom)
 					{
-						if(((LivingEntity)e).getEntityType() == EntityType.HOSTILE)
+						if(e instanceof LivingEntity && ((LivingEntity)e).getEntityType() == EntityType.HOSTILE)
 						{
 							shouldOpen = false;
 							break;

@@ -227,9 +227,14 @@ public final class Helper
 	public static void removeObject(GameObject obj)
 	{
 		if(isWorldLocked())
+		{
 			objectsToRemove.add(obj);
-		else
+		}
+		else if(obj.getBody() != null)
+		{
 			obj.getWorld().destroyBody(obj.getBody());
+			obj.setBody(null);
+		}
 	}
 	
 	public static void cleanup()
@@ -263,7 +268,10 @@ public final class Helper
 			objectsToAdd.clear();
 			
 			while(objectsToRemove.size() != 0)
-				removeObject(objectsToRemove.get(objectsToRemove.size() - 1));
+			{
+				GameObject obj = objectsToRemove.remove(objectsToRemove.size() - 1);
+				removeObject(obj);
+			}
 		}
 		else
 			throw new IllegalStateException("cleanup cannot be called when world is locked!");

@@ -280,6 +280,8 @@ public abstract class GameObject
 			this.bullet = bullet;
 	}
 	
+	public void setBody(Body b) { body = b; }
+	
 	public float getDensity()
 	{
 		return density;
