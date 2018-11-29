@@ -117,6 +117,12 @@ public final class Helper
 		return vec;
 	}
 	
+	public static float randomizer(float baseValue, float range)
+	{
+		float value = (float) (Math.random() * range + baseValue);
+		return value;
+	}
+	
 	public static Vector2 clamp(Vector2 vec, Vector2 min, Vector2 max)
 	{
 		return clamp(vec, min.x, min.y, max.x, max.y);

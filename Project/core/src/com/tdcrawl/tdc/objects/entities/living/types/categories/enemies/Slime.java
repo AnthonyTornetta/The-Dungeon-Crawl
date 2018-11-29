@@ -11,17 +11,18 @@ import com.tdcrawl.tdc.objects.entities.living.Player;
 import com.tdcrawl.tdc.objects.entities.living.types.categories.HostileEntity;
 import com.tdcrawl.tdc.registries.templates.ObjectData;
 import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
+import com.tdcrawl.tdc.util.Helper;
 
 //whatever else corns needs, I'll get. I need to create the object and do testing.
 public class Slime extends HostileEntity
 {
 	float lastJump = 0;
-	float counter = 0;
+	float timeCounter = 0;
 	
 	public Slime(Shape shape, Vector2 position, float friction,
 			float angle, boolean bullet, boolean fixedRotation, boolean collidable, int maxHealth)
 	{
-		super(shape, position, BodyType.DynamicBody, 0.3f, 0.7f, friction, angle, bullet, fixedRotation, collidable, maxHealth);
+		super(shape, position, BodyType.DynamicBody, 5f, 0f, friction, angle, bullet, fixedRotation, collidable, maxHealth);
 	}
 	
 	@Override
@@ -36,9 +37,14 @@ public class Slime extends HostileEntity
 		return true;
 	}
 	
+	
+	public void takeDamage(int amt) 
+	{ super.takeDamage(amt); jump();}
+
+	//Hops really high some times for no apparent reason.
+	//Sometimes short after going off the player.
 	public void jump()
 	{
-		//FIX THIS TRASH
 		Player currentPlayer = null;
 		
 		for(Entity o : getRoom().getEntitiesInRoom())
@@ -46,35 +52,32 @@ public class Slime extends HostileEntity
 			if(o instanceof Player)
 			{
 				 currentPlayer = (Player)o;
-				 System.out.println("Player Found!");
+				// System.out.println("Player Found!");
 			}
 		}
 		
-		if(currentPlayer.equals(null))
+		if(currentPlayer == null)
 		{
-			System.out.println("Triggered Idle Jump");
-			getBody().applyForceToCenter(getBody().getMass() * 90.0f, 90, true);
+			getBody().applyForceToCenter(getBody().getMass() * 90.0f, 0, true);
 		}
 		else
 		{
-			System.out.println("Triggered Directional Jump");
-			float[] dataChunk = super.getPath(currentPlayer);
-			Vector2 hopDir = new Vector2();
-			
-			hopDir.y = getBody().getMass() + 1000.0f;
-			//might work on more advanced hops; higher pathing in later tests
-			if(dataChunk[2] > 90 && dataChunk[2] < 270)
-			{
-				System.out.println("Jumped 300");
-				hopDir.x = 300;
-			}
-			else
-			{
-				System.out.println("Jumped 60");
-				hopDir.x = 60;
-			}
-			
-			getBody().applyForceToCenter(hopDir, true);
+				float[] dataChunk = super.getPath(currentPlayer);
+				Vector2 hopDir = new Vector2();
+				
+				hopDir.y = Helper.randomizer(getBody().getMass() * 300.0f, getBody().getMass() * 200);
+				//might work on more advanced hops; higher pathing in later tests
+				if(dataChunk[2] > 90 && dataChunk[2] < 270)
+				{
+					hopDir.x = Helper.randomizer(getBody().getMass() * -50, getBody().getMass() * -25);
+				}
+				else
+				{
+					hopDir.x = Helper.randomizer(getBody().getMass() * 50, getBody().getMass() * 25);
+				}
+				
+				System.out.println("Force is: " + getBody().getLinearVelocity());
+				getBody().applyForceToCenter(hopDir, true);
 		}
 	}
 	
@@ -84,10 +87,12 @@ public class Slime extends HostileEntity
 		public GameObject create(ObjectData data)
 		{
 			CircleShape shape = new CircleShape();
+			if(data.radius == 0)
+				data.radius = Helper.randomizer(0.25f, 0.5f);
 			shape.setRadius(data.radius);
 			
 //(Shape shape, Vector2 position, float friction, float angle, boolean bullet, boolean fixedRotation, boolean collidable, int maxHealth)
-			return new Slime(shape, data.position, data.getOrDef("friction", 0.3f), data.getOrDef("angle", 0f), true, true, true, (int)data.getOrDef("maxHealth", 20f));
+			return new Slime(shape, data.position, data.getOrDef("friction", 0.2f), data.getOrDef("angle", 0f), true, true, true, (int)data.getOrDef("maxHealth", 20f));
 		}
 		
 		/*
@@ -101,17 +106,16 @@ public class Slime extends HostileEntity
 	@Override
 	public void tick(float delta, Camera cam) 
 	{
-		
 		//used to counteract gravity, makes it 'bouncier'
-		getBody().applyForceToCenter(new Vector2(0, getBody().getMass() * 6.0f), true);
+		getBody().applyForceToCenter(new Vector2(0, getBody().getMass() * 2.0f), true);
 		
-		if(getLastJump()+3 <= counter)
+		if(getLastJump()+3 <= timeCounter || this.isOnGround())
 		{
 			jump();
-			setLastJump(counter);
+			setLastJump(timeCounter);
 		}
 		
-		counter += delta;
+		timeCounter += delta;
 	}
 	public float getLastJump() {return this.lastJump;}
 	public void setLastJump(float currentTime) {this.lastJump = currentTime;}
