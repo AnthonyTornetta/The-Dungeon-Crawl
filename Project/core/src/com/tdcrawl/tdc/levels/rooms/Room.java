@@ -64,9 +64,12 @@ public class Room
 			if(e instanceof Player)
 			{
 				Player p = (Player)e;
-				p.die();
 				
-				TheDungeonCrawl.get().setScreen(new YouDiedScreen());
+				if(p.getHealth() <= 0)
+				{
+					p.die();
+					TheDungeonCrawl.get().setScreen(new YouDiedScreen());
+				}
 			}
 			else if(e instanceof LivingEntity)
 			{

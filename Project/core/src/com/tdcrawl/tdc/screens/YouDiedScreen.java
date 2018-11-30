@@ -1,32 +1,32 @@
 package com.tdcrawl.tdc.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.tdcrawl.tdc.util.Helper;
 
 public class YouDiedScreen implements Screen
 {
 	SpriteBatch batch = new SpriteBatch();
 	private OrthographicCamera cam = new OrthographicCamera();
+	BitmapFont font = new BitmapFont();
 
 	@Override
 	public void show()
 	{
-		// TODO Auto-generated method stub
-		
+		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	}
 
 	@Override
 	public void render(float delta)
 	{
-		BitmapFont font = new BitmapFont();
+	    batch.setProjectionMatrix(cam.combined);
 
-		batch.setProjectionMatrix(cam.combined); //or your matrix to draw GAME WORLD, not UI
+	    batch.begin();
 
-		batch.begin();
-	
-		font.draw(batch, "Hello World!", 10, 10);
+	    font.draw(batch, "Hello World!", 10, 10);
 
 	    batch.end();
 	 }
@@ -34,8 +34,9 @@ public class YouDiedScreen implements Screen
 	@Override
 	public void resize(int width, int height)
 	{
-		// TODO Auto-generated method stub
-		
+		cam = new OrthographicCamera(Helper.pxToM(width), Helper.pxToM(height));
+		cam.zoom = Math.min(720f / width, 480f / height);
+		cam.update();
 	}
 
 	@Override
