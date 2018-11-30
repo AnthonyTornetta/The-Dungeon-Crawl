@@ -34,10 +34,8 @@ public class Room
 		this.level = level;
 	}
 	
-	int ts = 0;
-	
 	public void tick(float delta, Camera cam)
-	{ts++;
+	{
 		if(thingsToSpawn.size() != 0)
 		{
 			if(getPlayer() != null)
