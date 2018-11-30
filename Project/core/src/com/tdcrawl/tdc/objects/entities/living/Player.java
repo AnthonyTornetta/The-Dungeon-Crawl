@@ -306,9 +306,16 @@ public class Player extends LivingEntity
 		if(heldItem == null)
 		{
 			//Setting the new item to the player's hand.
-			item.setAsBox(0.1f, -0.1f);
+			item.setAsBox(0.1f, 0.1f);
 			xoffset = 0.05f;
-			yoffset = -0.05f;
+			yoffset = -0.17f;
+			facingLeft = false;
+			
+			//If the method was called to flip the arm to the left.
+			if(left)
+			{
+				facingLeft = true;
+			}	
 		}
 		else
 		{
@@ -326,7 +333,8 @@ public class Player extends LivingEntity
 				facingLeft = true;
 			}
 		}
-		
+
+	
 		//Defining a sensor for collision detection, with the size and coordinates of the item.
 		itemSensor = new Sensor(item, new Vector2(0.5f + xoffset, 0.2f + yoffset))
 		{
