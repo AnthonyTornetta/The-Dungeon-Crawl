@@ -99,8 +99,6 @@ public class Level
 						topBorder = y == 0,
 						bottomBorder = y == roomAmountXY.y * 2 - 1;
 				
-				System.out.println(y + ", " + x+ " , " + (roomAmountXY.y * 2 - 1));
-				
 				if(x == roomAmountXY.x && y == roomAmountXY.y)
 					r = spawnRoom.createRoom(this, new Vector2(xOffset, yOffset), leftBorder, rightBorder, topBorder, bottomBorder);
 				else
@@ -212,7 +210,6 @@ public class Level
 					{
 						if(!getPlayer().getRoom().equals(room))
 						{
-							System.out.println("YEAH");
 							getPlayer().getRoom().removeObject(getPlayer());
 							getPlayer().setRoom(room);
 							room.addObject(getPlayer());

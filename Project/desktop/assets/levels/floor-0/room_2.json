@@ -2,17 +2,13 @@
 	"objects":
 	[
 		{
-			"name": "ball",
+			"name": "slime",
 			"position":
 			{
 				"x": 10,
 				"y": 10
 			},
-			"radius": "0.8f",
-			"extraData":
-			{
-				"restitution": "0.7f"
-			}
+			"radius": 0.75f
 		},
 		{
 			"name": "platform",

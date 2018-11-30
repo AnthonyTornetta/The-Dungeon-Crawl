@@ -70,7 +70,7 @@ public class Door extends Entity
 	private static ObjectFixture setupCenterFixture()
 	{
 		CircleShape center = new CircleShape();
-		center.setRadius(0.1f);
+		center.setRadius(0f);
 		return new ObjectFixture(false, 0, 0, 0, center, new Vector2(0, 0));
 	}
 	

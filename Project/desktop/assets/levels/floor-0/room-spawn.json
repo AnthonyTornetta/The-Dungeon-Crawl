@@ -11,98 +11,17 @@
 			"position":
 			{
 				"x": 10,
-				"y": 10
+				"y": 0.71f
 			}
 		},
 		{
 			"name": "slime",
 			"position":
 			{
-				"x": 10,
-				"y": 14
+				"x": 18,
+				"y": 1f
 			},
-			"radius": 0.75f
-		},
-		{
-			"name": "ball",
-			"position":
-			{
-				"x": 0,
-				"y": 2
-			},
-			"radius": "0.8f",
-			"extraData":
-			{
-				"restitution": "0.7f"
-			}
-		},
-		{
-			"name": "ball",
-			"position":
-			{
-				"x": 0,
-				"y": 3
-			},
-			"radius": "0.8f",
-			"extraData":
-			{
-				"restitution": "0.7f"
-			}
-		},
-		{
-			"name": "ball",
-			"position":
-			{
-				"x": 0,
-				"y": 4
-			},
-			"radius": "0.8f",
-			"extraData":
-			{
-				"restitution": "0.7f"
-			}
-		},
-		{
-			"name": "ball",
-			"position":
-			{
-				"x": 0,
-				"y": 5
-			},
-			"radius": "0.8f",
-			"extraData":
-			{
-				"restitution": "0.7f"
-			}
-		},
-		{
-			"name": "item",
-			"position":
-			{
-				"x": 0,
-				"y": 5
-			},
-			"extraData":
-			{
-				"itemId": "testItem"
-			}
-		},
-		{
-			"name": "door",
-			"position":
-			{
-				"x": 2,
-				"y": 1
-			},
-			"dimensions":
-			{
-				"x": .025f,
-				"y": 1
-			},
-			"extraData":
-			{
-				"angle": 2f
-			}
+			"radius": 1f
 		}
 	]
 }

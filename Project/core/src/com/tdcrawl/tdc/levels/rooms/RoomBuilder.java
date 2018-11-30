@@ -10,7 +10,6 @@ import com.tdcrawl.tdc.levels.Level;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.entities.Door;
 import com.tdcrawl.tdc.objects.entities.Entity;
-import com.tdcrawl.tdc.objects.entities.living.Player;
 import com.tdcrawl.tdc.objects.staticobjects.Platform;
 import com.tdcrawl.tdc.registries.ObjectRegistry;
 import com.tdcrawl.tdc.registries.templates.ObjectData;
@@ -82,9 +81,6 @@ public class RoomBuilder
 			
 			o.getPosition().add(offset);
 			
-			if(o instanceof Player)
-				System.out.println("YOEYET");
-			
 			room.addObject(o);
 			if(o instanceof Entity)
 				((Entity)o).setRoom(room);
@@ -116,7 +112,6 @@ public class RoomBuilder
 			
 			Door floorDoor = new Door(new Vector2(dimensions.x / 2, dimensions.y).add(offset), new Vector2(thickness, doorWidth / 2), (float)Math.PI / 2.0f, doorWidth / 2);
 			floorDoor.setLocked(bottomBorder);
-			
 			
 			room.addObject(floorDoor);
 			room.addObject(floorPlatform1);

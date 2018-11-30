@@ -2,16 +2,16 @@
 	"objects":
 	[
 		{
-			"name": "platform",
+			"name": "rectangle",
 			"position":
 			{
 				"x": 10,
-				"y": 8
+				"y": 10
 			},
 			"dimensions":
 			{
-				"x": 4,
-				"y": 0.25f
+				"x": 1,
+				"y": 1
 			}
 		},
 		{
@@ -19,7 +19,7 @@
 			"position":
 			{
 				"x": 10,
-				"y": 16
+				"y": 8
 			},
 			"dimensions":
 			{

@@ -32,7 +32,7 @@ public class ItemObject extends GameObject
 	 */
 	private ItemObject(Item i)
 	{
-		super(null, BodyType.DynamicBody, 0, false, false, false, new ObjectFixture(false, 0.7f, 0.0f, 0.0f, createShape(), Vector2.Zero));
+		super(null, BodyType.DynamicBody, 0, false, false, true, new ObjectFixture(true, 0.7f, 0.0f, 0.0f, createShape(), Vector2.Zero));
 		this.item = i;
 	}
 	
