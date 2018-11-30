@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
+import com.tdcrawl.tdc.TheDungeonCrawl;
 import com.tdcrawl.tdc.levels.Level;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.entities.Door;
@@ -12,6 +13,7 @@ import com.tdcrawl.tdc.objects.entities.Entity;
 import com.tdcrawl.tdc.objects.entities.living.LivingEntity;
 import com.tdcrawl.tdc.objects.entities.living.Player;
 import com.tdcrawl.tdc.objects.entities.living.types.EntityType;
+import com.tdcrawl.tdc.screens.YouDiedScreen;
 import com.tdcrawl.tdc.util.Helper;
 
 /**
@@ -50,7 +52,14 @@ public class Room
 		{
 			e.tick(delta, cam);
 			
-			if(e instanceof LivingEntity)
+			if(e instanceof Player)
+			{
+				Player p = (Player)e;
+				p.die();
+				
+				TheDungeonCrawl.get().setScreen(new YouDiedScreen());
+			}
+			else if(e instanceof LivingEntity)
 			{
 				LivingEntity living = (LivingEntity)e;
 				if(living.getHealth() <= 0)

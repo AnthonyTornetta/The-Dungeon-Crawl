@@ -64,7 +64,7 @@ public class Player extends LivingEntity
 	
 	private ShapeRenderer sr = new ShapeRenderer();
 	
-	private boolean flying = false, noclip = false; // I did this to test stuff dan, dont worry about it (press f or c to activate them respectively)
+	private boolean flying = false, noclip = false;
 	
 	public Player(Vector2 position, int maxHealth)
 	{
@@ -274,54 +274,68 @@ public class Player extends LivingEntity
 		getBody().setLinearVelocity(getBody().getLinearVelocity().add(acceleration));
 	}
 	
+	//Called when anything causes the item in the player's hand to be reloaded.
+	//(Switching to a new item, rotating the arm, loading a level.)
 	private void switchItem(Item newItem, boolean initial, boolean left)
 	{
 		heldItem = newItem;
+		
+		//Difference of coordinates to center the item in the player's hand.
 		float yoffset = 0.0f;
 		float xoffset = 0.0f;
 		
+		//Removes the old item from the world.
 		if(!initial)
 		{	
 			Helper.removeFixture(itemSensor);
 		}
 		
+		//Defines the shape and size of the new item on the screen.
 		PolygonShape item = new PolygonShape();
 		if(heldItem == null)
 		{
+			//Setting the new item to the player's hand.
 			item.setAsBox(0.1f, -0.1f);
 			xoffset = 0.05f;
 			yoffset = -0.05f;
 		}
 		else
 		{
+			//Setting the new item to the size and offset of the item selected.
 			item.setAsBox(heldItem.getDimensions().x, heldItem.getDimensions().y);
 			xoffset = heldItem.getDimensions().x / 2;
 			yoffset = heldItem.getDimensions().y / 2;
 			facingLeft = false;
 			
+			//If the method was called to flip the arm to the left.
 			if(left)
 			{
+				//Flip the item to face downwards.
 				yoffset = -2 * yoffset;
 				facingLeft = true;
 			}
 		}
 		
+		//Defining a sensor for collision detection, with the size and coordinates of the item.
 		itemSensor = new Sensor(item, new Vector2(0.5f + xoffset, 0.2f + yoffset))
 		{
 			
 			@Override
 			public void onCollide(GameObject other, ObjectFixture fixture)
 			{
+				//If the item hits a living entity, the player is swinging, and the entity has not been hit yet this swing.
 				if(other instanceof LivingEntity && timeSinceSwing < TIME_BETWEEN_SWINGS * 9 / 10 && !alreadyHit.contains(other))
 				{
 					System.out.print("Hit for ");
 					if(heldItem instanceof MeleeWeapon)
 					{
+						//Applying the proper damage based on the weapon used.
 						((LivingEntity) other).takeDamage(((MeleeWeapon) heldItem).getDamage());
 						System.out.print(((Weapon) heldItem).getDamage());
 					}
 					else
 					{
+						//Applying one damage if the player is hitting with something other than a melee weapon.
 						((LivingEntity) other).takeDamage(1);
 						System.out.print("1");
 					}
@@ -334,11 +348,12 @@ public class Player extends LivingEntity
 			@Override
 			public void onUncollide(GameObject other, ObjectFixture fixture)
 			{
+				//Set the item to be able to hit any living entity on the next swing.
 				alreadyHit.clear();
 			}
 		};
 		
-		
+		//Add the new item to the world, attached to the player's arm.
 		Helper.addFixture(itemSensor, arm);
 	}
 

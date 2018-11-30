@@ -10,6 +10,8 @@ import com.tdcrawl.tdc.util.Reference;
 
 public class TheDungeonCrawl extends Game
 {
+	private static TheDungeonCrawl instance;
+	
 	static // Runs before anything else (even main method)
 	{
 	    GdxNativesLoader.load();
@@ -18,6 +20,8 @@ public class TheDungeonCrawl extends Game
 	@Override
 	public void create()
 	{
+		instance = this;
+		
 		CustomEvents.registerAll();
 		Items.registerAll();
 		Objects.registerAll();
@@ -31,4 +35,6 @@ public class TheDungeonCrawl extends Game
 			Reference.handleError(ex);
 		}
 	}
+	
+	public static TheDungeonCrawl get() { return instance; }
 }
