@@ -135,17 +135,22 @@ public class Player extends LivingEntity
 		timeSinceLastJump += delta;
 		timeSinceSwing += delta;
 		
+		//DANIEL'S CODE
+		//If the player clicks, start a swing.
 		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && timeSinceSwing > TIME_BETWEEN_SWINGS)
 		{
 			timeSinceSwing = 0.0f;
 		}
 		
+		//Angle needed for proper swing mechanic is inverted if the player is facing left.
 		if(facingLeft)
 		{
+			//For the first fifth of the swing time, pull arm upwards.
 			if(timeSinceSwing < TIME_BETWEEN_SWINGS / 5)
 			{
 				arm.setAngle(arm.getAngle() - SWING_STRENGTH);
 			}
+			//For the rest of the swing, push arm downwards.
 			else if(timeSinceSwing <= TIME_BETWEEN_SWINGS * 9 / 10)
 			{
 				arm.setAngle(arm.getAngle() + SWING_STRENGTH);
@@ -153,15 +158,18 @@ public class Player extends LivingEntity
 		}
 		else
 		{
+			//For the first fifth of the swing time, pull arm upwards.
 			if(timeSinceSwing < TIME_BETWEEN_SWINGS / 5)
 			{
 				arm.setAngle(arm.getAngle() + SWING_STRENGTH);
 			}
+			//For the rest of the swing, push arm downwards.
 			else if(timeSinceSwing <= TIME_BETWEEN_SWINGS * 9 / 10)
 			{
 				arm.setAngle(arm.getAngle() - SWING_STRENGTH);
 			}
 		}
+		//END OF DANIEL'S CODE
 		
 		int mX = Gdx.input.getX();
 		int mY = Gdx.input.getY();
@@ -246,6 +254,8 @@ public class Player extends LivingEntity
 			}
 		}
 		
+		//DANIEL'S CODE
+		//Switches items if the player presses "1", "2", or "3"
 		if(Gdx.input.isKeyPressed(Input.Keys.NUM_1))
 		{
 			switchItem(inventory.getItems()[0], false, facingLeft);
@@ -261,6 +271,7 @@ public class Player extends LivingEntity
 			switchItem(inventory.getItems()[2], false, facingLeft);
 		}
 		
+		//Switches items in order to correctly orient the item if the player rotates left or right.
 		if(Math.abs(arm.getAngle()) > Math.PI / 2 && Math.abs(arm.getAngle()) < Math.PI * 3 / 2 && !facingLeft && timeSinceSwing > TIME_BETWEEN_SWINGS * 9 / 10)
 		{
 			switchItem(heldItem, false, true);
@@ -356,6 +367,7 @@ public class Player extends LivingEntity
 		//Add the new item to the world, attached to the player's arm.
 		Helper.addFixture(itemSensor, arm);
 	}
+	//END OF DANIEL'S CODE.
 
 	@Override
 	public boolean die()

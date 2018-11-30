@@ -2,6 +2,7 @@ package com.tdcrawl.tdc.items.items.weapons;
 
 import com.tdcrawl.tdc.items.Item;
 
+//DANIEL
 public abstract class Weapon extends Item
 {
 	private int damage;

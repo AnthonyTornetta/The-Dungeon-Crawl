@@ -16,27 +16,21 @@ public class YouDiedScreen implements Screen
 	@Override
 	public void show()
 	{
-		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
 	}
 
 	@Override
 	public void render(float delta)
 	{
-	    batch.setProjectionMatrix(cam.combined);
-
 	    batch.begin();
-
-	    font.draw(batch, "Hello World!", 10, 10);
-
+	    font.draw(batch, "Hello World!", 100, 100);
 	    batch.end();
 	 }
 
 	@Override
 	public void resize(int width, int height)
 	{
-		cam = new OrthographicCamera(Helper.pxToM(width), Helper.pxToM(height));
-		cam.zoom = Math.min(720f / width, 480f / height);
-		cam.update();
+		
 	}
 
 	@Override
