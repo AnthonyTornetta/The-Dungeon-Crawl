@@ -54,14 +54,7 @@ public abstract class HostileEntity extends LivingEntity implements IPathable
 				dataPack[2] = 270 - dataPack[2];
 			else
 				dataPack[2] = 180 - dataPack[2];
-		}
-		
-		
-		/*
-		for(int ye = 0; ye < dataPack.length; ye++)
-			System.out.println("Data: " + dataPack[ye]);
-		*/
-		
+		}		
 		return dataPack;
 	}
 	

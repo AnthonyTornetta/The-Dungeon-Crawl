@@ -13,9 +13,9 @@ import com.tdcrawl.tdc.registries.templates.ObjectData;
 import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
 import com.tdcrawl.tdc.util.Helper;
 
-//whatever else corns needs, I'll get. I need to create the object and do testing.
 public class Slime extends HostileEntity
 {
+	//used to keep it from instantly jumping
 	float lastJump = 0;
 	float timeCounter = 0;
 	
@@ -25,24 +25,25 @@ public class Slime extends HostileEntity
 		super(shape, position, BodyType.DynamicBody, 5f, 0f, friction, angle, bullet, fixedRotation, collidable, maxHealth);
 	}
 	
+	//removes the object from the world after HP runs out
 	@Override
 	public boolean die()
 	{
 		return true;
 	}
 
+	//whether it takes damage or not
 	@Override
 	public boolean invulnerable()
 	{
 		return false;
 	}
 	
-	
+	//Forces the entity to lose HP and jump instantly
 	public void takeDamage(int amt) 
 	{ super.takeDamage(amt); jump();}
 
-	//Hops really high some times for no apparent reason.
-	//Sometimes short after going off the player.
+	//Varied jumps based on random change, how it moves
 	public void jump()
 	{
 		Player currentPlayer = null;
@@ -56,31 +57,32 @@ public class Slime extends HostileEntity
 			}
 		}
 		
+		//if there is no player it hops in place
 		if(currentPlayer == null)
 		{
 			getBody().applyForceToCenter(getBody().getMass() * 90.0f, 0, true);
 		}
 		else
 		{
-				float[] dataChunk = super.getPath(currentPlayer);
-				Vector2 hopDir = new Vector2();
-				
-				hopDir.y = Helper.randomizer(getBody().getMass() * 300.0f, getBody().getMass() * 200);
-				//might work on more advanced hops; higher pathing in later tests
-				if(dataChunk[2] > 90 && dataChunk[2] < 270)
-				{
-					hopDir.x = Helper.randomizer(getBody().getMass() * -50, getBody().getMass() * -25);
-				}
-				else
-				{
-					hopDir.x = Helper.randomizer(getBody().getMass() * 50, getBody().getMass() * 25);
-				}
-				
-				System.out.println("Force is: " + getBody().getLinearVelocity());
-				getBody().applyForceToCenter(hopDir, true);
+			float[] dataChunk = super.getPath(currentPlayer);
+			Vector2 hopDir = new Vector2();
+			
+			//finds the vertical and horizontal hop strength as well as where it should hop based on player
+			hopDir.y = Helper.randomizer(getBody().getMass() * 300.0f, getBody().getMass() * 200);
+			
+			if(dataChunk[2] > 90 && dataChunk[2] < 270)
+			{
+				hopDir.x = Helper.randomizer(getBody().getMass() * -50, getBody().getMass() * -25);
+			}
+			else
+			{
+				hopDir.x = Helper.randomizer(getBody().getMass() * 50, getBody().getMass() * 25);
+			}
+			getBody().applyForceToCenter(hopDir, true);
 		}
 	}
 	
+	//A good method built to allow uniform creation of all types of slimes
 	public static class SlimeTemplate implements ObjectTemplate
 	{
 		@Override
@@ -91,24 +93,18 @@ public class Slime extends HostileEntity
 				data.radius = Helper.randomizer(0.25f, 0.5f);
 			shape.setRadius(data.radius);
 			
-//(Shape shape, Vector2 position, float friction, float angle, boolean bullet, boolean fixedRotation, boolean collidable, int maxHealth)
 			return new Slime(shape, data.position, data.getOrDef("friction", 0.2f), data.getOrDef("angle", 0f), true, true, true, (int)data.getOrDef("maxHealth", 20f));
-		}
-		
-		/*
-		 * Get or Def Exemplary:
-		 * data.getOrDef("restitution", 0.1f)
-		 * returns the 'restitution' based on string key, else gives value of 0.1f
-		 */
-		
+		}		
 	}
 
+	//moves when the game updates
 	@Override
 	public void tick(float delta, Camera cam) 
 	{
 		//used to counteract gravity, makes it 'bouncier'
 		getBody().applyForceToCenter(new Vector2(0, getBody().getMass() * 2.0f), true);
 		
+		//times so it doesn't infinitely jump
 		if(getLastJump()+3 <= timeCounter || this.isOnGround())
 		{
 			jump();
@@ -117,6 +113,8 @@ public class Slime extends HostileEntity
 		
 		timeCounter += delta;
 	}
+	
+	//getters and setters
 	public float getLastJump() {return this.lastJump;}
 	public void setLastJump(float currentTime) {this.lastJump = currentTime;}
 }
