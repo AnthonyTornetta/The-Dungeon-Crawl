@@ -10,6 +10,9 @@ import com.tdcrawl.tdc.events.types.CollisionEvent.CollisionState;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
 
+/**
+ * Handles collision for everything
+ */
 public class DefaultCollisionHandler implements ContactListener
 {
 	@Override

@@ -191,6 +191,11 @@ public class Level
 		return "assets/levels/floor-" + FLOOR_NUMBER + "/";
 	}
 	
+	/**
+	 * Updates the level
+	 * @param delta The time passed since last tick
+	 * @param camera The camera used to render the scene
+	 */
 	public void tick(float delta, Camera camera)
 	{
 		Helper.setWorldLocked(true);
@@ -223,6 +228,12 @@ public class Level
 		Helper.setWorldLocked(false);
 	}
 	
+	/**
+	 * Renders the level
+	 * @param delta Time passed since last render
+	 * @param cam The camera used to render it
+	 * @param debugRenderer A renderer for it
+	 */
 	public void render(float delta, Camera cam, Box2DDebugRenderer debugRenderer)
 	{
 		if(player != null)
@@ -233,6 +244,9 @@ public class Level
 			debugRenderer.render(world, cam.combined);
 	}
 	
+	/**
+	 * Disposes all the level's assets
+	 */
 	public void dispose()
 	{
 		world.dispose();
