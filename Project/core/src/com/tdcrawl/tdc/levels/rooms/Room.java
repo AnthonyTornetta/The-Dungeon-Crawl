@@ -31,11 +31,20 @@ public class Room
 	
 	private Player player = null;
 	
+	/**
+	 * Handles the opening and closing of areas based off objects inside
+	 * @param level The level it's a part of
+	 */
 	public Room(Level level)
 	{
 		this.level = level;
 	}
 	
+	/**
+	 * Ticks the room
+	 * @param delta The time passed since last tick
+	 * @param cam The camera used to render the room
+	 */
 	public void tick(float delta, Camera cam)
 	{
 		if(thingsToSpawn.size() != 0)
@@ -95,6 +104,10 @@ public class Room
 		}
 	}
 	
+	/**
+	 * Sets if the room's doors are open
+	 * @param isOpen If it is open
+	 */
 	private void setOpen(boolean isOpen)
 	{
 		this.isOpen = isOpen;
@@ -108,6 +121,9 @@ public class Room
 		}
 	}
 	
+	/**
+	 * Spawns all the hostile entities to spawn into the room
+	 */
 	public void initiateRoom()
 	{
 		if(thingsToSpawn.size() != 0)
@@ -126,6 +142,9 @@ public class Room
 		thingsToSpawn.clear();
 	}
 	
+	/**
+	 * Initializes the room
+	 */
 	public void init()
 	{
 		boolean spawnRoom = false;
