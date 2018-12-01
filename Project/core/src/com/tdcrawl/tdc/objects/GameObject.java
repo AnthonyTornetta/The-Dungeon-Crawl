@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
 import com.tdcrawl.tdc.util.Helper;
+import com.tdcrawl.tdc.util.box2ez.BoxHelper;
 
 /**
  * Stores fixtures to be added to the body (other than the center one) once it is initialized.
@@ -148,7 +149,7 @@ public abstract class GameObject
 		{
 			if(centerFixture == null)
 				centerFixture = f;
-			Helper.addFixture(f, this);
+			BoxHelper.addFixture(f, this);
 		}
 		else
 		{
@@ -166,7 +167,7 @@ public abstract class GameObject
 			if(f.equals(centerFixture))
 				centerFixture = null;
 			
-			Helper.removeFixture(f);
+			BoxHelper.removeFixture(f);
 		}
 		else
 		{

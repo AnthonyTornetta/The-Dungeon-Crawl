@@ -22,9 +22,9 @@ import com.tdcrawl.tdc.levels.rooms.Room;
 import com.tdcrawl.tdc.levels.rooms.RoomBuilder;
 import com.tdcrawl.tdc.objects.entities.living.Player;
 import com.tdcrawl.tdc.physics.DefaultCollisionHandler;
-import com.tdcrawl.tdc.util.Helper;
 import com.tdcrawl.tdc.util.Reference;
 import com.tdcrawl.tdc.util.Vector2I;
+import com.tdcrawl.tdc.util.box2ez.BoxHelper;
 
 /**
  * Stores all the rooms of a given level and handles their generation
@@ -152,7 +152,7 @@ public class Level
 				
 				if(!event.isCancelled() && !event.isLocked())
 				{
-					Helper.cleanup();
+					BoxHelper.cleanup();
 				}
 			}
 		});
@@ -198,7 +198,7 @@ public class Level
 	 */
 	public void tick(float delta, Camera camera)
 	{
-		Helper.setWorldLocked(true);
+		BoxHelper.setWorldLocked(true);
 		world.step(delta, 8, 3); // 8 and 3 are good* values I found online. *I assume they are good.
 		// URL: http://www.iforce2d.net/b2dtut/worlds
 		
@@ -225,7 +225,7 @@ public class Level
 				room.tick(delta, camera);
 			}
 		}
-		Helper.setWorldLocked(false);
+		BoxHelper.setWorldLocked(false);
 	}
 	
 	/**

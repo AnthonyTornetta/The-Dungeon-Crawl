@@ -14,7 +14,7 @@ import com.tdcrawl.tdc.objects.entities.living.LivingEntity;
 import com.tdcrawl.tdc.objects.entities.living.Player;
 import com.tdcrawl.tdc.objects.entities.living.types.EntityType;
 import com.tdcrawl.tdc.screens.YouDiedScreen;
-import com.tdcrawl.tdc.util.Helper;
+import com.tdcrawl.tdc.util.box2ez.BoxHelper;
 
 /**
  * Just a thing that stores a bunch of GameObjects
@@ -85,7 +85,7 @@ public class Room
 			System.out.println("AYE ADDED");
 			LivingEntity deadBoi = dead.remove(dead.size() - 1);
 			removeObject(deadBoi);
-			Helper.removeObject(deadBoi);
+			BoxHelper.removeObject(deadBoi);
 		}
 		
 		if(isPlayerIn() && !isOpen)

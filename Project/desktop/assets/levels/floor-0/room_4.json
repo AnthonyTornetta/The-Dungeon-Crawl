@@ -1,0 +1,36 @@
+{
+	"objects":
+	[
+		{
+			"name": "slime",
+			"position":
+			{
+				"x": 8,
+				"y": 10
+			},
+			"radius": 0.75f
+		},
+		{
+			"name": "slime",
+			"position":
+			{
+				"x": 12,
+				"y": 10
+			},
+			"radius": 0.75f
+		},
+		{
+			"name": "platform",
+			"position":
+			{
+				"x": 10,
+				"y": 8
+			},
+			"dimensions":
+			{
+				"x": 4,
+				"y": 0.25f
+			}
+		}
+	]
+}

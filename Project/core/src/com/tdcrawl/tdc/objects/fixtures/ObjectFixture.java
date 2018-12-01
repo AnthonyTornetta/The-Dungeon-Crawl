@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.tdcrawl.tdc.util.Helper;
+import com.tdcrawl.tdc.util.box2ez.BoxHelper;
 
 /**
  * A nicer way of creating a fixture and adding it to a body
@@ -55,7 +56,7 @@ public class ObjectFixture
 		fixtureDef.density = getDensity();
 		fixtureDef.friction = getFriction();
 				
-		Helper.moveShape(getShape(), position);
+		BoxHelper.moveShape(getShape(), position);
 		
 		fixtureDef.shape = getShape();
 		fixtureDef.restitution = getRestitution();

@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.tdcrawl.tdc.joints.ObjectJoint;
 import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
-import com.tdcrawl.tdc.util.Helper;
+import com.tdcrawl.tdc.util.box2ez.BoxHelper;
 
 /**
  * A game object that is easily attachable to another object
@@ -101,7 +101,7 @@ public abstract class BodyPart extends GameObject
 	{
 		if(attached())
 		{
-			Helper.removeJoint(getJoint());
+			BoxHelper.removeJoint(getJoint());
 			joint = null;
 		}
 	}

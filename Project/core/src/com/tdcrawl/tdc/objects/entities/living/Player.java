@@ -29,6 +29,7 @@ import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
 import com.tdcrawl.tdc.util.Helper;
 import com.tdcrawl.tdc.util.Reference;
 import com.tdcrawl.tdc.util.UserDataParser;
+import com.tdcrawl.tdc.util.box2ez.BoxHelper;
 
 public class Player extends LivingEntity
 {
@@ -298,7 +299,7 @@ public class Player extends LivingEntity
 		//Removes the old item from the world.
 		if(!initial)
 		{	
-			Helper.removeFixture(itemSensor);
+			BoxHelper.removeFixture(itemSensor);
 		}
 		
 		//Defines the shape and size of the new item on the screen.
@@ -373,7 +374,7 @@ public class Player extends LivingEntity
 		};
 		
 		//Add the new item to the world, attached to the player's arm.
-		Helper.addFixture(itemSensor, arm);
+		BoxHelper.addFixture(itemSensor, arm);
 	}
 	//END OF DANIEL'S CODE.
 

@@ -10,8 +10,8 @@ import com.tdcrawl.tdc.objects.GameObject;
 import com.tdcrawl.tdc.objects.fixtures.ObjectFixture;
 import com.tdcrawl.tdc.registries.templates.ObjectData;
 import com.tdcrawl.tdc.registries.templates.ObjectTemplate;
-import com.tdcrawl.tdc.util.Helper;
 import com.tdcrawl.tdc.util.Reference;
+import com.tdcrawl.tdc.util.box2ez.BoxHelper;
 
 /**
  * @author Cornchip
@@ -51,8 +51,8 @@ public class Door extends Entity
 		bottomDoorShape.setAsBox(dimensions.x, dimensions.y / 2);
 		bottom = new ObjectFixture(true, 1.0f, 0.1f, 0.6f, bottomDoorShape, new Vector2(0, -dimensions.y / 2));
 		
-		Helper.addFixture(top, this);
-		Helper.addFixture(bottom, this);
+		BoxHelper.addFixture(top, this);
+		BoxHelper.addFixture(bottom, this);
 	}
 	
 	@Override
@@ -81,8 +81,8 @@ public class Door extends Entity
 		if(!locked && amtOpen > 0)
 		{
 			amtOpen -= 0.1f;
-			Helper.moveShape(top.getShape(), new Vector2(0, -0.1f));
-			Helper.moveShape(bottom.getShape(), new Vector2(0, 0.1f));
+			BoxHelper.moveShape(top.getShape(), new Vector2(0, -0.1f));
+			BoxHelper.moveShape(bottom.getShape(), new Vector2(0, 0.1f));
 			
 			getBody().setAwake(true);
 		}
@@ -93,8 +93,8 @@ public class Door extends Entity
 		if(!locked && amtOpen < openAmount)
 		{
 			amtOpen += 0.1f;
-			Helper.moveShape(top.getShape(), new Vector2(0, 0.1f));
-			Helper.moveShape(bottom.getShape(), new Vector2(0, -0.1f));
+			BoxHelper.moveShape(top.getShape(), new Vector2(0, 0.1f));
+			BoxHelper.moveShape(bottom.getShape(), new Vector2(0, -0.1f));
 			
 			getBody().setAwake(true);
 		}
